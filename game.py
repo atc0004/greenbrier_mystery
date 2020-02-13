@@ -6,6 +6,10 @@ class Game:
     """ Game Class that is the master to all other game content
     """
 
+    """Game initializer
+    
+    Initializes pygame, the Screen, clock, room(s), and gets the scene list as of 2/13/2020
+    """
     def __init__(self):
         WINDOW_SIZE = [640, 640]
         pygame.init()
@@ -15,6 +19,10 @@ class Game:
         self.room = Room(self.screen)
         self.scenes = self.room.scene_list
 
+    """Main Game Loop
+    
+    For now everything is in here, but methods may be created to clean up this code (2/13/2020)
+    """
     def main_loop(self):
         print(self.room)
         pygame.time.set_timer(pygame.USEREVENT, 100)
@@ -37,7 +45,9 @@ class Game:
             pygame.display.update()
         pygame.quit()
 
-
+"""Main Runner
+Creates game object and runs the Game loop
+"""
 if __name__ == '__main__':
     game = Game()
     game.main_loop()
