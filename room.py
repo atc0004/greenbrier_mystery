@@ -44,3 +44,5 @@ class Room:
         
     def render_current_scene(self):
         self.current_scene.render_scene()
+    def update_current_scene(self, event):
+        self.current_scene.update_scene(event)
