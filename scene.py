@@ -36,9 +36,13 @@ class Scene:
     This will be used to update things within the scene (animations, TextBlurbs, etc)
     """
 
-    def update_scene(self, eventType):
+    def update_scene(self):
         if hasattr(self, 'message'):
             self.message.update()
+            self.message.draw()
+            pygame.display.flip()
+
+
     """Reset Scene
 
     Only want to do this with things such as text.. maybe? could be removed at a later date

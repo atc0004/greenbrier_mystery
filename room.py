@@ -79,5 +79,5 @@ class Room:
 
     """If scene was already rendered, just update the current scene"""
 
-    def update_current_scene(self, event):
-        self.current_scene.update_scene(event)
+    def update_current_scene(self):
+        self.current_scene.update_scene()
