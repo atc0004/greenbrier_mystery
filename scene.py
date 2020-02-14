@@ -18,12 +18,14 @@ class Scene:
         if self.background == (255, 0, 0):
             self.message = TextBlurb(self.font, "Hello world...",
                                      (200, 200), self.screen, autoreset=False)
+        # self.image = pygame.image.load('./quicktopdown.PNG')
 
     """Scene Renderer
     Renders the background to the screen
     """
     def render_scene(self):
         self.screen.fill(self.background)
+        # self.screen.blit(self.image, (0,0))
         if self.background == (255, 0, 0):
             self.message.draw()
             pygame.display.flip()

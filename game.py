@@ -7,9 +7,10 @@ class Game:
     """
 
     """Game initializer
-    
+
     Initializes pygame, the Screen, clock, room(s), and gets the scene list as of 2/13/2020
     """
+
     def __init__(self):
         WINDOW_SIZE = [640, 640]
         pygame.init()
@@ -20,9 +21,10 @@ class Game:
         self.scenes = self.room.scene_list
 
     """Main Game Loop
-    
+
     For now everything is in here, but methods may be created to clean up this code (2/13/2020)
     """
+
     def main_loop(self):
         print(self.room)
         pygame.time.set_timer(pygame.USEREVENT, 100)
@@ -30,20 +32,24 @@ class Game:
         while not self.done:
             self.room.render_current_scene()
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.done = True
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        print("Right, next scene")
-                        self.room.get_next_scene()
-                    elif event.key == pygame.K_LEFT:
-                        print("Left, previous scene")
-                        self.room.get_prev_scene()
-                else:
-                    self.room.update_current_scene(event.type)
+                self.handle_event(event)
+
             self.clock.tick(30)
             pygame.display.update()
         pygame.quit()
+
+    def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            self.done = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                print("Right, next scene")
+                self.room.get_next_scene()
+            elif event.key == pygame.K_LEFT:
+                print("Left, previous scene")
+                self.room.get_prev_scene()
+        else:
+            self.room.update_current_scene(event.type)
 
 """Main Runner
 Creates game object and runs the Game loop

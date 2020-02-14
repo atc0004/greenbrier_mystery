@@ -70,13 +70,11 @@ class Room:
             self.current_scene_pos = self.scene_count-1
         self.current_scene = self.scene_list[self.current_scene_pos]
 
-
     """Render the Current Scene"""
 
     def render_current_scene(self):
         self.current_scene.render_scene()
 
-        
     """If scene was already rendered, just update the current scene"""
 
     def update_current_scene(self, event):
