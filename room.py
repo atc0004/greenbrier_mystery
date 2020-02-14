@@ -47,7 +47,7 @@ class Room:
     def generate_scenes(self):
         scene_list = []
         for x in range(5):
-            scene_list.append(Scene(self.color_list[x], self.screen))
+            scene_list.append(Scene(self.color_list[x], self.screen, f"Welcome to scene {x}.."))
         return scene_list
 
     """Get Next Scene
@@ -55,6 +55,7 @@ class Room:
     """
 
     def get_next_scene(self):
+        self.current_scene.reset_scene()
         self.current_scene_pos += 1
         if self.current_scene_pos == self.scene_count:
             self.current_scene_pos = 0
@@ -65,6 +66,7 @@ class Room:
     """
 
     def get_prev_scene(self):
+        self.current_scene.reset_scene()
         self.current_scene_pos -= 1
         if self.current_scene_pos == -1:
             self.current_scene_pos = self.scene_count-1
