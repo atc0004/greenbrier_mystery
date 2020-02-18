@@ -39,7 +39,8 @@ class Scene:
     def update_scene(self):
         if hasattr(self, 'message'):
             self.message.update()
-            self.message.draw()
+            if not self.message.finished:
+                self.message.draw()
             pygame.display.flip()
 
 

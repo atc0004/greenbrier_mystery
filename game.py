@@ -50,6 +50,7 @@ class Game:
                 self.room.get_next_scene()
 
             elif event.key == pygame.K_LEFT:
+
                 print("Left, previous scene")
                 self.room.get_prev_scene()
         else:
