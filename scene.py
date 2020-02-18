@@ -26,8 +26,9 @@ class Scene:
     """
 
     def render_scene(self):
-        self.screen.fill(self.background)
-        # self.screen.blit(self.image, (0,0))
+        # self.screen.fill(self.background)
+
+        self.screen.blit(self.background, (0,0))
         if hasattr(self, 'message'):
             self.message.draw()
             pygame.display.flip()
