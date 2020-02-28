@@ -1,7 +1,7 @@
 import pygame
 
 
-class Button:
+class Button(object):
     def __init__(self, button_rect, text='', font=None, default_surface=None, hover_surface=None):
         self.button_rect = pygame.Rect(button_rect)
         self.text = text
@@ -68,3 +68,27 @@ class Button:
         if exit_button:
             actions.append('exit')
         return actions
+
+    # Override these
+    def mouse_click(self):
+        pass
+    def mouse_enter(self):
+        self.update()
+    def mouse_exit(self):
+        self.update()
+
+class PlayButton(Button):
+    def mouse_click(self, calling):
+        # Go to main game loop.. but how?
+        calling.main_loop()
+        print('clicked play')
+
+class SettingsButton(Button):
+    def mouse_click(self, calling):
+        # Go to main game loop.. but how?
+        print('clicked settings')
+class ExitButton(Button):
+    def mouse_click(self, calling):
+        # Go to main game loop.. but how?
+        pygame.quit()
+        exit()

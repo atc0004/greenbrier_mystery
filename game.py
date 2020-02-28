@@ -1,7 +1,7 @@
 import pygame
 from room import Room
 import os
-from button import Button
+from button import PlayButton, SettingsButton, ExitButton
 
 
 class Game:
@@ -22,7 +22,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.room = Room(self.screen)
         self.scenes = self.room.scene_list
-
+        self.menu = True
     """Main Game Loop
 
     For now everything is in here, but methods may be created to clean up this code (2/13/2020)
@@ -40,10 +40,11 @@ class Game:
             self.clock.tick(30)
             pygame.display.update()
         pygame.quit()
+        exit()
 
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
-        main_menu = True
+        
         gb_img = pygame.image.load('assets/menu_bg.PNG')
         title_img = pygame.image.load('assets/title.png')
         button1_img = pygame.image.load('assets/button.png')
@@ -58,15 +59,15 @@ class Game:
         button1_rect = pygame.Rect(720, 420, 520, 170)
         button2_rect = pygame.Rect(720, 630, 520, 170)
         button3_rect = pygame.Rect(720, 840, 520, 170)
-        play_button = Button(button1_rect, "PLAY",
+        play_button = PlayButton(button1_rect, "PLAY",
                              button_font, button1_img, button1_hover)
-        settings_button = Button(
+        settings_button = SettingsButton(
             button2_rect, "SETTINGS", button_font, button2_img, button2_hover)
-        exit_button = Button(button3_rect, "EXIT",
+        exit_button = ExitButton(button3_rect, "EXIT",
                              button_font, button3_img, button3_hover)
         all_buttons = [play_button, settings_button, exit_button]
         # gb_image = pygame.transform
-        while main_menu:
+        while self.menu:
             # render menu
 
             self.screen.blit(gb_img, (0, 0))
@@ -86,15 +87,11 @@ class Game:
                     for b in all_buttons:
                         button_events = b.handle_event(event)
                         if 'click' in button_events:
-                            if b.text == "PLAY":
-                                return
-                            if b.text == "EXIT":
-                                pygame.quit()
-                                exit()
-                            else:
-                                print('click')
+                            b.mouse_click(self)
                         elif 'enter' in button_events:
-                            b.update()
+                            b.mouse_enter()
+                        elif 'exit' in button_events:
+                            b.mouse_exit()
                         else:
                             b.update()
 
@@ -115,6 +112,8 @@ class Game:
             elif event.key == pygame.K_LEFT:
                 print("Left, previous scene")
                 self.room.get_prev_scene()
+            elif event.key == pygame.K_ESCAPE:
+                self.done = True
         else:
             self.room.update_current_scene(event.type)
 
