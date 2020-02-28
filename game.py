@@ -1,6 +1,6 @@
 import pygame
 from room import Room
-
+import os
 
 class Game:
     """ Game Class that is the master to all other game content
@@ -12,9 +12,10 @@ class Game:
     """
 
     def __init__(self):
-        WINDOW_SIZE = [640, 640]
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
+        self.WINDOW_SIZE = [1920, 1080]
         pygame.init()
-        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         self.done = False
         self.clock = pygame.time.Clock()
         self.room = Room(self.screen)
@@ -38,6 +39,31 @@ class Game:
             pygame.display.update()
         pygame.quit()
 
+    def main_menu(self):
+        print('Main Menu Starting')  # Debug Print
+        main_menu = True
+        gb_img = pygame.image.load('assets/menu_bg.PNG')
+        title_img = pygame.image.load('assets/title.png')
+        button_img = pygame.image.load('assets/button.png')
+        # gb_image = pygame.transform
+        while main_menu:
+            # render menu
+
+            self.screen.blit(
+                gb_img, (0, 0))
+            self.screen.blit(title_img,(525, 60))
+            self.screen.blit(button_img, (720,420))
+            self.screen.blit(button_img, (720, 630))
+            self.screen.blit(button_img, (720, 840))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.done = True
+                    pygame.quit()
+            self.clock.tick(30)
+            pygame.display.update()
+        pygame.quit()
+        # get and process events
+
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.done = True
@@ -51,9 +77,11 @@ class Game:
         else:
             self.room.update_current_scene(event.type)
 
+
 """Main Runner
 Creates game object and runs the Game loop
 """
 if __name__ == '__main__':
     game = Game()
+    game.main_menu()
     game.main_loop()
