@@ -2,7 +2,7 @@ import pygame
 from room import Room
 import os
 from button import PlayButton, SettingsButton, ExitButton
-
+from character import Character
 
 class Game:
     """ Game Class that is the master to all other game content
@@ -23,6 +23,7 @@ class Game:
         self.room = Room(self.screen)
         self.scenes = self.room.scene_list
         self.menu = True
+        self.player = Character((100,100))
     """Main Game Loop
 
     For now everything is in here, but methods may be created to clean up this code (2/13/2020)
@@ -31,11 +32,12 @@ class Game:
     def main_loop(self):
         print(self.room)
         pygame.time.set_timer(pygame.USEREVENT, 100)
-
+        # player = Character((100,100))
         while not self.done:
             self.room.render_current_scene()
             for event in pygame.event.get():
                 self.handle_event(event)
+            self.player.draw(self.screen)
 
             self.clock.tick(30)
             pygame.display.update()
@@ -108,12 +110,16 @@ class Game:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 print("Right, next scene")
-                self.room.get_next_scene()
+                # self.room.get_next_scene()
+                
+                self.player.walking = True
             elif event.key == pygame.K_LEFT:
                 print("Left, previous scene")
                 self.room.get_prev_scene()
             elif event.key == pygame.K_ESCAPE:
                 self.done = True
+        elif event.type == pygame.KEYUP:
+            self.player.walking = False
         else:
             self.room.update_current_scene(event.type)
 
