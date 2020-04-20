@@ -41,7 +41,7 @@ class Game:
 
             for event in pygame.event.get():
                 self.handle_event(event)
-            self.clock.tick(30)
+            self.clock.tick(60)
             pygame.display.update()
         pygame.quit()
         exit()
@@ -112,7 +112,8 @@ class Game:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 print("Right, next scene")
-                self.room.get_next_scene()
+                # self.room.get_next_scene()
+                self.room.update_current_scene()
 
             elif event.key == pygame.K_LEFT:
 
@@ -121,7 +122,8 @@ class Game:
             elif event.key == pygame.K_ESCAPE:
                 self.done = True
         else:
-            self.room.update_current_scene()
+            pass
+            # self.room.update_current_scene()
 
 
 

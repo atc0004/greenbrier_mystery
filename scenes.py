@@ -13,6 +13,7 @@ class Scene:
     """
 
     def __init__(self, color, screen, message_text='', image=''):
+        self.bgX = 0
         self.font = pygame.font.Font(None, 25)
         self.background = color
         self.screen = screen
@@ -25,7 +26,7 @@ class Scene:
     def render_scene(self):
         self.screen.fill(self.background)
         if self.image is not None:
-            self.screen.blit(self.image, (0,0))
+            self.screen.blit(self.image, (self.bgX,0))
         if hasattr(self, 'message'):
             self.message.draw()
             pygame.display.flip()
@@ -40,6 +41,9 @@ class Scene:
             if not self.message.finished:
                 self.message.draw()
             pygame.display.flip()
+        self.bgX -= 1.2
+        self.screen.blit(self.image, (self.bgX,0))
+        pygame.display.update()
 
     """Reset Scene
 
