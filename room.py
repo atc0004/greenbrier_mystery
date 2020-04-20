@@ -1,6 +1,5 @@
 import pygame
-from scene import Scene
-from itertools import cycle
+from scenes import Scene
 
 
 class Room:
@@ -46,8 +45,9 @@ class Room:
 
     def generate_scenes(self):
         scene_list = []
-        for x in range(5):
-            scene_list.append(Scene(self.color_list[x], self.screen, f"Welcome to scene {x}.."))
+        scene_list.append(Scene(self.color_list[0], self.screen, '', 'assets/scene_1.png'))
+        # for x in range(5):
+            # scene_list.append(Scene(self.color_list[x], self.screen, f"Welcome to scene {x}..", 'assets/'))
         return scene_list
 
     """Get Next Scene
