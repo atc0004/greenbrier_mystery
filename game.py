@@ -1,8 +1,7 @@
 import pygame
-from room import Room
 import os
 from button import PlayButton, SettingsButton, ExitButton
-
+from game_scenes import Hall_Scene
 
 class Game:
     """ Game Class that is the master to all other game content
@@ -22,8 +21,7 @@ class Game:
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE, flags = pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
         self.clock = pygame.time.Clock()
-        self.room = Room(self.screen)
-        self.scenes = self.room.scene_list
+        # self.scenes = self.room.scene_list
         self.menu = True
         self.current_scene = None
 
@@ -33,18 +31,27 @@ class Game:
     """
 
     def main_loop(self):
-        print(self.room)
-        pygame.time.set_timer(pygame.USEREVENT, 150)
-
+        hall = Hall_Scene()
         while not self.done:
-            if self.current_scene != self.room.current_scene:
-                self.room.render_current_scene()
-                self.current_scene = self.room.current_scene
-
+            events = []
+            quit_opt = False
             for event in pygame.event.get():
-                self.handle_event(event)
-            pygame.display.update()
-            self.room.update_current_scene()
+                if event.type == pygame.QUIT:
+                    quit_opt = True
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        quit_opt = True
+                if quit_opt:
+                    self.done = True
+                else:
+                    events.append(event)
+
+            
+            hall.ProcessInput(events, [])
+            hall.Update()
+            
+            hall.Render(self.screen)
+            pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()
         exit()
@@ -62,7 +69,7 @@ class Game:
         button3_hover = pygame.image.load('assets/button_hover.png')
         button_font = pygame.font.Font(
             './assets/fonts/Cheap_Pine_Sans.otf', 100)
-
+        
         button1_rect = pygame.Rect(720, 420, 520, 170)
         button2_rect = pygame.Rect(720, 630, 520, 170)
         button3_rect = pygame.Rect(720, 840, 520, 170)
@@ -103,7 +110,6 @@ class Game:
                             b.update()
 
             self.clock.tick(60)
-            # play_button.update()
             pygame.display.update()
         pygame.quit()
         exit()
