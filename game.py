@@ -23,6 +23,8 @@ class Game:
         self.room = Room(self.screen)
         self.scenes = self.room.scene_list
         self.menu = True
+        self.current_scene = None
+
     """Main Game Loop
 
     For now everything is in here, but methods may be created to clean up this code (2/13/2020)
@@ -30,13 +32,15 @@ class Game:
 
     def main_loop(self):
         print(self.room)
-        pygame.time.set_timer(pygame.USEREVENT, 100)
+        pygame.time.set_timer(pygame.USEREVENT, 150)
 
         while not self.done:
-            self.room.render_current_scene()
+            if self.current_scene != self.room.current_scene:
+                self.room.render_current_scene()
+                self.current_scene = self.room.current_scene
+
             for event in pygame.event.get():
                 self.handle_event(event)
-
             self.clock.tick(30)
             pygame.display.update()
         pygame.quit()
@@ -109,13 +113,16 @@ class Game:
             if event.key == pygame.K_RIGHT:
                 print("Right, next scene")
                 self.room.get_next_scene()
+
             elif event.key == pygame.K_LEFT:
+
                 print("Left, previous scene")
                 self.room.get_prev_scene()
             elif event.key == pygame.K_ESCAPE:
                 self.done = True
         else:
-            self.room.update_current_scene(event.type)
+            self.room.update_current_scene()
+
 
 
 """Main Runner
