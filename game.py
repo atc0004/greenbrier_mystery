@@ -15,9 +15,11 @@ class Game:
 
     def __init__(self):
         os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
+        # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
         pygame.init()
-        self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+        # self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+        self.screen = pygame.display.set_mode(self.WINDOW_SIZE, flags = pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
         self.clock = pygame.time.Clock()
         self.room = Room(self.screen)
@@ -41,8 +43,9 @@ class Game:
 
             for event in pygame.event.get():
                 self.handle_event(event)
-            self.clock.tick(60)
             pygame.display.update()
+            self.room.update_current_scene()
+            self.clock.tick(60)
         pygame.quit()
         exit()
 
@@ -114,6 +117,7 @@ class Game:
                 print("Right, next scene")
                 # self.room.get_next_scene()
                 self.room.scroll_right = True
+                # self.room.update_current_scene()
 
             elif event.key == pygame.K_LEFT:
 

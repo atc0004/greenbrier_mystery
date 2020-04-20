@@ -42,8 +42,8 @@ class Scene:
                 self.message.draw()
             pygame.display.flip()
         if scroll:
-            self.bgX -= 1.2
             self.screen.blit(self.image, (self.bgX,0))
+            self.bgX -= 1
         pygame.display.update()
 
     """Reset Scene
