@@ -28,6 +28,7 @@ class Room:
         self.current_scene_pos = 0
         self.current_scene = self.start_scene
         self.scene_count = len(self.scene_list)
+        self.scroll_right = False
 
     # Just to pretty print the Room details
     def __str__(self):
@@ -80,4 +81,4 @@ class Room:
     """If scene was already rendered, just update the current scene"""
 
     def update_current_scene(self):
-        self.current_scene.update_scene()
+        self.current_scene.update_scene(self.scroll_right)

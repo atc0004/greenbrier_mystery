@@ -113,7 +113,7 @@ class Game:
             if event.key == pygame.K_RIGHT:
                 print("Right, next scene")
                 # self.room.get_next_scene()
-                self.room.update_current_scene()
+                self.room.scroll_right = True
 
             elif event.key == pygame.K_LEFT:
 
@@ -121,9 +121,12 @@ class Game:
                 self.room.get_prev_scene()
             elif event.key == pygame.K_ESCAPE:
                 self.done = True
+        elif event.type == pygame.KEYUP:
+            self.room.scroll_right = False
+
         else:
-            pass
-            # self.room.update_current_scene()
+            # pass
+            self.room.update_current_scene()
 
 
 

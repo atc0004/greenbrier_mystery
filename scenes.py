@@ -35,14 +35,15 @@ class Scene:
     This will be used to update things within the scene (animations, TextBlurbs, etc)
     """
 
-    def update_scene(self):
+    def update_scene(self, scroll):
         if hasattr(self, 'message'):
             self.message.update()
             if not self.message.finished:
                 self.message.draw()
             pygame.display.flip()
-        self.bgX -= 1.2
-        self.screen.blit(self.image, (self.bgX,0))
+        if scroll:
+            self.bgX -= 1.2
+            self.screen.blit(self.image, (self.bgX,0))
         pygame.display.update()
 
     """Reset Scene
