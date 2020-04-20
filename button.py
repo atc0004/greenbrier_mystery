@@ -81,8 +81,9 @@ class PlayButton(Button):
     def mouse_click(self, calling):
         # Go to main game loop.. but how?
         calling.main_loop()
+        
         print('clicked play')
-
+        # return 2
 class SettingsButton(Button):
     def mouse_click(self, calling):
         # Go to main game loop.. but how?

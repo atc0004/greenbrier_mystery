@@ -3,6 +3,7 @@ import os
 from button import PlayButton, SettingsButton, ExitButton
 from game_scenes import Hall_Scene
 
+
 class Game:
     """ Game Class that is the master to all other game content
     """
@@ -18,7 +19,8 @@ class Game:
         self.WINDOW_SIZE = [1920, 1080]
         pygame.init()
         # self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
-        self.screen = pygame.display.set_mode(self.WINDOW_SIZE, flags = pygame.FULLSCREEN | pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode(
+            self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
         self.clock = pygame.time.Clock()
         # self.scenes = self.room.scene_list
@@ -46,10 +48,9 @@ class Game:
                 else:
                     events.append(event)
 
-            
             hall.ProcessInput(events, [])
             hall.Update()
-            
+
             hall.Render(self.screen)
             pygame.display.flip()
             self.clock.tick(60)
@@ -58,9 +59,11 @@ class Game:
 
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
-        
+
         gb_img = pygame.image.load('assets/menu_bg.PNG')
         title_img = pygame.image.load('assets/title.png')
+        title_rotate_image = title_img
+        rect = title_img.get_rect()
         button1_img = pygame.image.load('assets/button.png')
         button2_img = button1_img.copy()
         button3_img = button1_img.copy()
@@ -69,27 +72,23 @@ class Game:
         button3_hover = pygame.image.load('assets/button_hover.png')
         button_font = pygame.font.Font(
             './assets/fonts/Cheap_Pine_Sans.otf', 100)
-        
+
         button1_rect = pygame.Rect(720, 420, 520, 170)
         button2_rect = pygame.Rect(720, 630, 520, 170)
         button3_rect = pygame.Rect(720, 840, 520, 170)
         play_button = PlayButton(button1_rect, "PLAY",
-                             button_font, button1_img, button1_hover)
+                                 button_font, button1_img, button1_hover)
         settings_button = SettingsButton(
             button2_rect, "SETTINGS", button_font, button2_img, button2_hover)
         exit_button = ExitButton(button3_rect, "EXIT",
-                             button_font, button3_img, button3_hover)
+                                 button_font, button3_img, button3_hover)
         all_buttons = [play_button, settings_button, exit_button]
-        # gb_image = pygame.transform
         while self.menu:
             # render menu
+           
 
             self.screen.blit(gb_img, (0, 0))
             self.screen.blit(title_img, (525, 60))
-            # self.screen.blit(button_img, (720,420))
-            # play_button.draw(self.screen)
-            # self.screen.blit(button_img, (720, 630))
-            # self.screen.blit(button_img, (720, 840))
             for b in all_buttons:
                 b.draw(self.screen)
             for event in pygame.event.get():
@@ -137,7 +136,6 @@ class Game:
         else:
             # pass
             self.room.update_current_scene()
-
 
 
 """Main Runner
