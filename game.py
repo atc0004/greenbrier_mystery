@@ -2,7 +2,7 @@ import pygame
 import os
 from button import PlayButton, SettingsButton, ExitButton
 from game_scenes import Hall_Scene
-
+from player import Player
 
 class Game:
     """ Game Class that is the master to all other game content
@@ -34,6 +34,9 @@ class Game:
 
     def main_loop(self):
         hall = Hall_Scene()
+        player = Player()
+        my_group = pygame.sprite.Group(player)
+
         while not self.done:
             events = []
             quit_opt = False
@@ -43,6 +46,11 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         quit_opt = True
+                    if event.key == pygame.K_RIGHT:
+                        player.walking = True
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_RIGHT:
+                        player.walking = False
                 if quit_opt:
                     self.done = True
                 else:
@@ -52,6 +60,8 @@ class Game:
             hall.Update()
 
             hall.Render(self.screen)
+            my_group.update()
+            my_group.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()

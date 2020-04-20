@@ -19,13 +19,13 @@ class Hall_Scene(SceneBase):
             self.Update()
 
     def Update(self):
-        if self.moving:
-            self.bgX -= 3
-        # pygame.display.update()
+        # if self.moving:
+            # self.bgX -= 3
+        pygame.display.update()
 
     def Render(self, screen):
         screen.blit(self.bg_image, (self.bgX,0))
-        pygame.display.update()
+        # pygame.display.update()
 
     def SwitchToScene(self, next_scene):
         self.next = next_scene
