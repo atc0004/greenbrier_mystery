@@ -34,7 +34,7 @@ class Game:
 
     def main_loop(self):
         hall = Hall_Scene()
-        player = Player()
+        player = Player(self.screen)
         my_group = pygame.sprite.Group(player)
 
         while not self.done:
