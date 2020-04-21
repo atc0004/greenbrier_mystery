@@ -29,7 +29,7 @@ class Game:
 
     """Main Game Loop
 
-    For now everything is in here, but methods may be created to clean up this code (2/13/2020)
+    Runs the game, initializes objects and logic.
     """
 
     def main_loop(self):
