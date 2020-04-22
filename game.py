@@ -39,7 +39,7 @@ class Game:
         box = Box((1000,player.y+175), 'assets/classifiedcrate.png', self.screen, True)
         my_group = pygame.sprite.Group(player)
         obj_group = pygame.sprite.Group(box)
-        user_interface = UI(self.screen, True)
+        user_interface = UI(self.screen, player, True)
         while not self.done:
             events = []
             quit_opt = False

@@ -15,6 +15,16 @@ class Player(pygame.sprite.Sprite):
             i = pygame.image.load(f'assets/characters/boy_{x}.png')
             self.images.append(pygame.transform.flip(i, True, False))
 
+        # Player details, for now it just has the demo stuff
+
+        self.details = {
+            'Parts':  2,
+            'Folders': 1,
+            'Keys': 1,
+            'Floor': 2,
+            'Time': 1961
+        }
+
         self.index = 0
         self.image = self.images[self.index]
         self.rect = pygame.Rect(self.x, self.y, 155, 395)
@@ -24,14 +34,9 @@ class Player(pygame.sprite.Sprite):
 
         black = (0, 0, 0, 20)
         size = (0, 0, 220, 100)
-        
-        # self.ellipse_rect.
+
         self.ellipse = pygame.draw.ellipse(surface, black, size)
         self.surface2 = pygame.transform.rotate(surface, -60)
-        # oldrect = self.surface2.get_rect()
-        # oldrect.topright = self.feet_coords
-        # self.surface2.convert_alpha()
-        # alp
 
     def update(self):
         self.screen.blit(self.surface2, self.feet_coords)
@@ -43,8 +48,11 @@ class Player(pygame.sprite.Sprite):
             self.x += 6
             self.rect = pygame.Rect(self.x, self.y, 155, 395)
             self.image = self.images[self.index//3]
-            self.feet_coords = (self.rect.center[0] - 300, self.rect.center[1]-30)
+            self.feet_coords = (
+                self.rect.center[0] - 300, self.rect.center[1]-30)
         else:
             self.index = 0
             self.image = self.standing_image
-        
+
+    def get_details(self):
+        return self.details
