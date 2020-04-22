@@ -4,6 +4,7 @@ from button import PlayButton, SettingsButton, ExitButton
 from game_scenes import Hall_Scene
 from player import Player
 from objects import Box
+from interface import UI
 class Game:
     """ Game Class that is the master to all other game content
     """
@@ -38,6 +39,7 @@ class Game:
         box = Box((1000,player.y+175), 'assets/classifiedcrate.png', self.screen, True)
         my_group = pygame.sprite.Group(player)
         obj_group = pygame.sprite.Group(box)
+        user_interface = UI(self.screen, True)
         while not self.done:
             events = []
             quit_opt = False
@@ -71,7 +73,8 @@ class Game:
             obj_group.draw(self.screen)
             my_group.update()
             my_group.draw(self.screen)
-            
+            user_interface.render()
+            user_interface.update()
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()

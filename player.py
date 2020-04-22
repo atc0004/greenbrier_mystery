@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.screen = screen
         self.images = []
         self.standing_image = pygame.image.load('assets/characters/boy.png')
-        self.x = 5
+        self.x = 120
         self.y = 600
         for x in range(0, 5):
             print(x)
