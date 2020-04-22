@@ -5,6 +5,8 @@ from game_scenes import Hall_Scene
 from player import Player
 from objects import Box
 from interface import UI
+
+
 class Game:
     """ Game Class that is the master to all other game content
     """
@@ -27,6 +29,7 @@ class Game:
         # self.scenes = self.room.scene_list
         self.menu = True
         self.current_scene = None
+        self.collision_counter = 0
 
     """Main Game Loop
 
@@ -34,11 +37,9 @@ class Game:
     """
 
     def main_loop(self):
-        hall = Hall_Scene()
         player = Player(self.screen)
-        box = Box((1000,player.y+175), 'assets/classifiedcrate.png', self.screen, True)
         my_group = pygame.sprite.Group(player)
-        obj_group = pygame.sprite.Group(box)
+        hall = Hall_Scene(player, self.screen)
         user_interface = UI(self.screen, player, True)
         while not self.done:
             events = []
@@ -59,18 +60,16 @@ class Game:
                 else:
                     events.append(event)
 
+            if hall.box_onscreen and hall.collides and self.collision_counter < 1:
+                # Hit the box, trigger the line
+                self.collision_counter += 1
+                # Should only print once
+                print("Hit box")
+                
+
             hall.ProcessInput(events, [])
             hall.Update()
-            collisions = pygame.sprite.spritecollide(player, obj_group, False, collided = None)
-            if len(collisions) != 0:
-                player.walking = False
-                if isinstance(collisions[0], Box):
-                    # Show message to player to go back in time, box fades away, player can move forward
-                    print("BOX IN WAY")
-            
             hall.Render(self.screen)
-            obj_group.update() 
-            obj_group.draw(self.screen)
             my_group.update()
             my_group.draw(self.screen)
             user_interface.render()
@@ -108,7 +107,6 @@ class Game:
         all_buttons = [play_button, settings_button, exit_button]
         while self.menu:
             # render menu
-           
 
             self.screen.blit(gb_img, (0, 0))
             self.screen.blit(title_img, (525, 60))

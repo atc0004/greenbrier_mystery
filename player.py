@@ -45,7 +45,8 @@ class Player(pygame.sprite.Sprite):
             # if self.index >= len(self.images):
             if self.index >= 12:
                 self.index = 0
-            self.x += 6
+            if self.x <= 900:
+                self.x += 8
             self.rect = pygame.Rect(self.x, self.y, 155, 395)
             self.image = self.images[self.index//3]
             self.feet_coords = (

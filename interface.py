@@ -1,6 +1,6 @@
 import pygame
 
-
+import math
 class UI:
     def __init__(self, screen, player, debug=False):
         self.screen = screen
@@ -39,18 +39,59 @@ class UI:
         self.gear_rect.centery = self.h * (1/6)
         self.folder_rect.centery = self.h * (2/6)
         self.key_rect.centery = self.h * (1/2)
+        self.watch_image = pygame.image.load('assets/ui/watch.png')
+        x, y = self.watch_image.get_rect().size
+        self.watch_image = pygame.transform.smoothscale(self.watch_image, (int(x*.3), int(y*.3)))
+        self.small_hand = pygame.image.load('assets/ui/short_hand.png')
+        x, y = self.small_hand.get_rect().size
+        self.small_hand = pygame.transform.smoothscale(self.small_hand, (int(x*.31), int(y*.31)))
+        self.big_hand = pygame.image.load('assets/ui/big_hand.png')
+        x, y = self.big_hand.get_rect().size
+        self.big_hand = pygame.transform.smoothscale(self.big_hand, (int(x*.25), int(y*.25)))
+
+        self.watch_rect = self.watch_image.get_rect()
+        self.small_hand_rect = self.small_hand.get_rect()
+        self.big_hand_rect = self.big_hand.get_rect()
+
+        self.watch_rect.center = (100, self.h*0.9)
+        # self.small_hand_rect.center =()
+        # self.big_hand_rect.left = self.watch_rect.centerx - 17
+        # self.big_hand_rect.top = self.watch_rect.centery + 10
+        self.face_center = (self.watch_rect.centerx - 14, self.watch_rect.centery + 7)
+        self.big_hand_rect.midtop = self.face_center
+        self.frame_count = 0
+        
+
 
         # self.note_rect.centery = 50
 
     def update(self):
         self.details = self.player.get_details()
-
+        self.frame_count += 1
         pygame.display.update()
 
     def render(self):
-        # Put transparent rectangle at side of screen,
-        # pygame.draw.rect(Surface, color, Rect, width=0)
         pygame.draw.rect(self.surface, self.black, self.surface.get_rect())
+        self.render_player_details()
+        self.render_watch()
+
+    def render_watch(self):
+        # Need to render watch first, then render the hand rotating
+        big = pygame.transform.rotate(self.big_hand, -self.frame_count).convert_alpha()
+        rect = big.get_rect(center=self.face_center)
+        if self.frame_count >= 360:
+            # print("360")
+            self.frame_count = 0
+        pygame.display.flip()
+        self.screen.blit(self.watch_image, self.watch_rect)
+        pygame.draw.circle(self.screen, (0,0,0), self.face_center, 5)
+        # print(self.frame_count)
+        # rect = big.get_rect(center=self.face_center)
+        # self.big_hand_rect.midtop = self.face_center
+        self.screen.blit(big, rect)
+        self.screen.blit(self.small_hand, self.small_hand_rect)
+
+    def render_player_details(self):
         self.screen.blit(self.surface, (0, 0))
         self.screen.blit(self.gear_image, self.gear_rect)
         self.screen.blit(self.folder_image, self.folder_rect)
@@ -73,7 +114,8 @@ class UI:
         self.screen.blit(folders_surface, folders_rect)
         self.screen.blit(keys_surface, keys_rect)
 
-        floor_surface = self.font.render(f"Floor {self.details['Floor']}", True, white)
+        floor_surface = self.font.render(
+            f"Floor {self.details['Floor']}", True, white)
         floor_rect = floor_surface.get_rect()
         floor_rect.center = (50, 35)
         self.screen.blit(floor_surface, floor_rect)
