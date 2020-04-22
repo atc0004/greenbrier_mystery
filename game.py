@@ -60,10 +60,10 @@ class Game:
             hall.ProcessInput(events, [])
             hall.Update()
             collisions = pygame.sprite.spritecollide(player, obj_group, False, collided = None)
-            print(collisions)
             if len(collisions) != 0:
                 player.walking = False
                 if isinstance(collisions[0], Box):
+                    # Show message to player to go back in time, box fades away, player can move forward
                     print("BOX IN WAY")
             
             hall.Render(self.screen)

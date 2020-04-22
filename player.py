@@ -7,6 +7,7 @@ class Player(pygame.sprite.Sprite):
         self.walking = False
         self.screen = screen
         self.images = []
+        self.standing_image = pygame.image.load('assets/characters/boy.png')
         self.x = 5
         self.y = 600
         for x in range(0, 5):
@@ -45,5 +46,5 @@ class Player(pygame.sprite.Sprite):
             self.feet_coords = (self.rect.center[0] - 300, self.rect.center[1]-30)
         else:
             self.index = 0
-            self.image = self.images[self.index]
+            self.image = self.standing_image
         
