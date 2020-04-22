@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.screen = screen
         self.images = []
         self.x = 5
-        self.y = 650
+        self.y = 600
         for x in range(0, 5):
             print(x)
             i = pygame.image.load(f'assets/characters/boy_{x}.png')
@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         print(self.feet_coords)
         surface = pygame.Surface((320, 240), pygame.SRCALPHA)
 
-        black = (0, 0, 0, 180)
+        black = (0, 0, 0, 20)
         size = (0, 0, 220, 100)
         
         # self.ellipse_rect.
@@ -43,7 +43,6 @@ class Player(pygame.sprite.Sprite):
             self.rect = pygame.Rect(self.x, self.y, 155, 395)
             self.image = self.images[self.index//3]
             self.feet_coords = (self.rect.center[0] - 300, self.rect.center[1]-30)
-            # self.ellipse_rect = pygame.Rect(self.feet_coords[0], self.feet_coords[1], 150, 120)
         else:
             self.index = 0
             self.image = self.images[self.index]

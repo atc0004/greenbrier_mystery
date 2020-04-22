@@ -3,7 +3,7 @@ import os
 from button import PlayButton, SettingsButton, ExitButton
 from game_scenes import Hall_Scene
 from player import Player
-
+from objects import Box
 class Game:
     """ Game Class that is the master to all other game content
     """
@@ -35,8 +35,9 @@ class Game:
     def main_loop(self):
         hall = Hall_Scene()
         player = Player(self.screen)
+        box = Box((1000,player.y+175), 'assets/classifiedcrate.png', self.screen, True)
         my_group = pygame.sprite.Group(player)
-
+        obj_group = pygame.sprite.Group(box)
         while not self.done:
             events = []
             quit_opt = False
@@ -58,10 +59,19 @@ class Game:
 
             hall.ProcessInput(events, [])
             hall.Update()
-
+            collisions = pygame.sprite.spritecollide(player, obj_group, False, collided = None)
+            print(collisions)
+            if len(collisions) != 0:
+                player.walking = False
+                if isinstance(collisions[0], Box):
+                    print("BOX IN WAY")
+            
             hall.Render(self.screen)
+            obj_group.update() 
+            obj_group.draw(self.screen)
             my_group.update()
             my_group.draw(self.screen)
+            
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()
