@@ -41,6 +41,7 @@ class Game:
         my_group = pygame.sprite.Group(player)
         hall = Hall_Scene(player, self.screen)
         user_interface = UI(self.screen, player, True)
+        timechange = False
         while not self.done:
             events = []
             quit_opt = False
@@ -55,6 +56,10 @@ class Game:
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT:
                         player.walking = False
+                    if event.key == pygame.K_t:
+                        # player.change_date()
+                        user_interface.change_date()
+                        timechange = True
                 if quit_opt:
                     self.done = True
                 else:

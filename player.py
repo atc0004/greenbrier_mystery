@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
             print(x)
             i = pygame.image.load(f'assets/characters/boy_{x}.png')
             self.images.append(pygame.transform.flip(i, True, False))
-
+        self.current_time = 1961
         # Player details, for now it just has the demo stuff
 
         self.details = {
@@ -54,6 +54,11 @@ class Player(pygame.sprite.Sprite):
         else:
             self.index = 0
             self.image = self.standing_image
+
+    def change_date(self, date):
+        # if self.current_time == 1961:
+            # self.details['Time'] -= 1
+        self.details['Time'] = date
 
     def get_details(self):
         return self.details

@@ -1,6 +1,9 @@
 import pygame
 
 import math
+from time import sleep
+
+
 class UI:
     def __init__(self, screen, player, debug=False):
         self.screen = screen
@@ -11,6 +14,10 @@ class UI:
         self.surface = pygame.Surface((100, 1200), pygame.SRCALPHA)
         self.rect = pygame.Rect((0, 0), (100, 1200))
         self.font = pygame.font.Font('assets/fonts/Cheap_Pine_Sans.otf', 30)
+        self.date_font = pygame.font.Font(
+            'assets/fonts/Cheap_Pine_Sans.otf', 20)
+        self.date_changing = False
+
 
         self.w, self.h = pygame.display.get_surface().get_size()
         self.folder_image = pygame.image.load('assets/ui/folder.png')
@@ -41,13 +48,16 @@ class UI:
         self.key_rect.centery = self.h * (1/2)
         self.watch_image = pygame.image.load('assets/ui/watch.png')
         x, y = self.watch_image.get_rect().size
-        self.watch_image = pygame.transform.smoothscale(self.watch_image, (int(x*.3), int(y*.3)))
+        self.watch_image = pygame.transform.smoothscale(
+            self.watch_image, (int(x*.3), int(y*.3)))
         self.small_hand = pygame.image.load('assets/ui/short_hand.png')
         x, y = self.small_hand.get_rect().size
-        self.small_hand = pygame.transform.smoothscale(self.small_hand, (int(x*.31), int(y*.31)))
+        self.small_hand = pygame.transform.smoothscale(
+            self.small_hand, (int(x*.31), int(y*.31)))
         self.big_hand = pygame.image.load('assets/ui/big_hand.png')
         x, y = self.big_hand.get_rect().size
-        self.big_hand = pygame.transform.smoothscale(self.big_hand, (int(x*.25), int(y*.25)))
+        self.big_hand = pygame.transform.smoothscale(
+            self.big_hand, (int(x*.25), int(y*.25)))
 
         self.watch_rect = self.watch_image.get_rect()
         self.small_hand_rect = self.small_hand.get_rect()
@@ -57,12 +67,12 @@ class UI:
         # self.small_hand_rect.center =()
         # self.big_hand_rect.left = self.watch_rect.centerx - 17
         # self.big_hand_rect.top = self.watch_rect.centery + 10
-        self.face_center = (self.watch_rect.centerx - 14, self.watch_rect.centery + 7)
+        self.face_center = (self.watch_rect.centerx - 14,
+                            self.watch_rect.centery + 7)
         self.big_hand_rect.midtop = self.face_center
         self.frame_count = 0
-        
-
-
+        self.target_date = self.details['Time']
+        self.curTime = self.target_date
         # self.note_rect.centery = 50
 
     def update(self):
@@ -77,17 +87,34 @@ class UI:
 
     def render_watch(self):
         # Need to render watch first, then render the hand rotating
-        big = pygame.transform.rotate(self.big_hand, -self.frame_count).convert_alpha()
+        if self.curTime == self.target_date:
+            self.player.change_date(self.target_date)
+            self.date_changing = False
+        big = pygame.transform.rotate(
+            self.big_hand, -self.frame_count).convert_alpha()
         rect = big.get_rect(center=self.face_center)
+        curTime = self.details['Time']
+        if self.curTime != self.target_date and self.date_changing:
+            if self.target_date < self.curTime:
+                self.curTime -= 2
+            if self.target_date > self.curTime:
+                self.curTime += 2
+        self.date_surface = self.date_font.render(
+            f"{self.curTime}", True, (0, 0, 0))
+        self.date_rect = self.date_surface.get_rect()
+        self.date_rect.centerx = self.face_center[0]
+        self.date_rect.centery = self.face_center[1] + 15
         if self.frame_count >= 360:
             # print("360")
             self.frame_count = 0
         pygame.display.flip()
         self.screen.blit(self.watch_image, self.watch_rect)
-        pygame.draw.circle(self.screen, (0,0,0), self.face_center, 5)
+        self.screen.blit(self.date_surface, self.date_rect)
+        pygame.draw.circle(self.screen, (0, 0, 0), self.face_center, 5)
         # print(self.frame_count)
         # rect = big.get_rect(center=self.face_center)
         # self.big_hand_rect.midtop = self.face_center
+
         self.screen.blit(big, rect)
         self.screen.blit(self.small_hand, self.small_hand_rect)
 
@@ -119,3 +146,14 @@ class UI:
         floor_rect = floor_surface.get_rect()
         floor_rect.center = (50, 35)
         self.screen.blit(floor_surface, floor_rect)
+
+    def change_date(self):
+        print(self.curTime)
+        print(self.target_date)
+        self.date_changing = True
+        curTime = self.details['Time']
+
+        if curTime == 1861:
+            self.target_date = 1961
+        if curTime == 1961:
+            self.target_date = 1861
