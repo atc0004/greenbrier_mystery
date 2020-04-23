@@ -18,6 +18,7 @@ class Hall_Scene(SceneBase):
         self.box = Box((1921, 775), 'assets/classifiedcrate.png',
                            self.screen, True)
         self.box_onscreen = False
+        
 
     def ProcessInput(self, events, pressed_keys):
 
@@ -42,7 +43,7 @@ class Hall_Scene(SceneBase):
         else:
             screen.blit(self.bg_image, (self.bgX, 0))
 
-        if self.edge_X <= 1450:
+        if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
             # Render the box
             
             self.box_onscreen = True
@@ -59,6 +60,8 @@ class Hall_Scene(SceneBase):
                     # Show message to player to go back in time, box fades away, player can move forward
             obj_group.update()
             obj_group.draw(screen)
+        else:
+            self.collides = False
 
     def SwitchToScene(self, next_scene):
         self.next = next_scene
