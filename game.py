@@ -42,7 +42,9 @@ class Game:
         hall = Hall_Scene(player, self.screen)
         user_interface = UI(self.screen, player, True)
         timechange = False
+        # print(type(self.screen))
         while not self.done:
+            sepia = False
             events = []
             quit_opt = False
             for event in pygame.event.get():
@@ -70,19 +72,23 @@ class Game:
                 self.collision_counter += 1
                 # Should only print once
                 print("Hit box")
-                
 
             hall.ProcessInput(events, [])
             hall.Update()
-            hall.Render(self.screen)
+            if player.details['Time'] == 1861:
+                # Apply overlay
+                sepia = True
+            hall.Render(self.screen, sepia)
             my_group.update()
             my_group.draw(self.screen)
             user_interface.render()
             user_interface.update()
+
             pygame.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(120)
         pygame.quit()
         exit()
+
 
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print

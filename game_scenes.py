@@ -9,6 +9,7 @@ class Hall_Scene(SceneBase):
         self.moving = False
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/scene_1.png')
+        self.bg_sepia = pygame.image.load('assets/hall_sepia.png')
         self.edge_X = self.bgX + 1920
         self.box_relative_position = 0
         self.player = player
@@ -35,8 +36,11 @@ class Hall_Scene(SceneBase):
         self.edge_X = self.bgX + 1920
         pygame.display.update()
 
-    def Render(self, screen):
-        screen.blit(self.bg_image, (self.bgX, 0))
+    def Render(self, screen, sepia):
+        if sepia:
+            screen.blit(self.bg_sepia, (self.bgX, 0))
+        else:
+            screen.blit(self.bg_image, (self.bgX, 0))
 
         if self.edge_X <= 1450:
             # Render the box
