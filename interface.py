@@ -18,7 +18,6 @@ class UI:
             'assets/fonts/Cheap_Pine_Sans.otf', 20)
         self.date_changing = False
 
-
         self.w, self.h = pygame.display.get_surface().get_size()
         self.folder_image = pygame.image.load('assets/ui/folder.png')
         self.gear_image = pygame.image.load('assets/ui/gear.png')
@@ -53,7 +52,7 @@ class UI:
         self.small_hand = pygame.image.load('assets/ui/short_hand.png')
         x, y = self.small_hand.get_rect().size
         self.small_hand = pygame.transform.smoothscale(
-            self.small_hand, (int(x*.31), int(y*.31)))
+            self.small_hand, (int(x*.25), int(y*.25)))
         self.big_hand = pygame.image.load('assets/ui/big_hand.png')
         x, y = self.big_hand.get_rect().size
         self.big_hand = pygame.transform.smoothscale(
@@ -64,16 +63,14 @@ class UI:
         self.big_hand_rect = self.big_hand.get_rect()
 
         self.watch_rect.center = (100, self.h*0.9)
-        # self.small_hand_rect.center =()
-        # self.big_hand_rect.left = self.watch_rect.centerx - 17
-        # self.big_hand_rect.top = self.watch_rect.centery + 10
         self.face_center = (self.watch_rect.centerx - 14,
                             self.watch_rect.centery + 7)
-        self.big_hand_rect.midtop = self.face_center
+        self.big_hand_rect.center = self.face_center
+        self.small_hand_rect.center = self.face_center
+
         self.frame_count = 0
         self.target_date = self.details['Time']
         self.curTime = self.target_date
-        # self.note_rect.centery = 50
 
     def update(self):
         self.details = self.player.get_details()
@@ -91,8 +88,11 @@ class UI:
             self.player.change_date(self.target_date)
             self.date_changing = False
         big = pygame.transform.rotate(
-            self.big_hand, -self.frame_count).convert_alpha()
+            self.big_hand, self.frame_count*12).convert_alpha()
+        small = pygame.transform.rotate(
+            self.small_hand, -self.frame_count*3).convert_alpha()
         rect = big.get_rect(center=self.face_center)
+        rect2 = small.get_rect(center=self.face_center)
         curTime = self.details['Time']
         if self.curTime != self.target_date and self.date_changing:
             if self.target_date < self.curTime:
@@ -111,12 +111,9 @@ class UI:
         self.screen.blit(self.watch_image, self.watch_rect)
         self.screen.blit(self.date_surface, self.date_rect)
         pygame.draw.circle(self.screen, (0, 0, 0), self.face_center, 5)
-        # print(self.frame_count)
-        # rect = big.get_rect(center=self.face_center)
-        # self.big_hand_rect.midtop = self.face_center
 
         self.screen.blit(big, rect)
-        self.screen.blit(self.small_hand, self.small_hand_rect)
+        self.screen.blit(small, rect2)
 
     def render_player_details(self):
         self.screen.blit(self.surface, (0, 0))
