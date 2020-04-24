@@ -80,6 +80,7 @@ class Gear(Interactable):
     def onclick(self):
         if not self.clicked:
             self.clicked = True
+            self.kill()
             return GearItem()
         # Need to give player aonother Gear
         # return Gear?(self.pos, 'assets/ui/gear.png', self.screen, True, )
@@ -97,6 +98,7 @@ class Chair(Interactable):
         self.originalPos = True
         self.oX = self.rect.x
         self.oY = self.rect.y
+
     def update(self):
         if self.clicked:
             if self.originalPos is False:
@@ -106,35 +108,50 @@ class Chair(Interactable):
             if(self.rect.x > 1200 or self.rect.y > 550):
                 self.rect.x -= 1
                 self.rect.y -= 1
-                
+
             else:
                 self.originalPos = False
                 self.clicked = False
-                
+
     def onclick(self):
-        self.clicked=True
+        if not self.clicked:
+            self.clicked = True
+
+            return Document((self.rect.right, self.rect.bottom), 'assets/ui/folder.png', self.screen, True)
+
 
 class Document(Interactable):
-    def __init__(self, pos, image_path, screen, disappears, debug = False):
+    def __init__(self, pos, image_path, screen, disappears, debug=False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
+        self.image = pygame.image.load(image_path).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50, 50))
 
     def update(self):
         if self.clicked:
-            print("Document clicked")
-            #display text blurb/info
-            #dissappear
+            print("clicked, not closed")
+
     def onclick(self):
-        self.clicked=True
-    
+        if not self.clicked:
+            self.clicked = True
+            self.kill()
+            return DocumentItem()
+
+
+class DocumentItem(Item):
+    def __init__(self):
+        Item.__init__(self, "Folders")
+        self.name = "Folders"
+
+
 class Key(Interactable):
-    def __init__(self, pos, image_path, screen, disappears, debug = False):
+    def __init__(self, pos, image_path, screen, disappears, debug=False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
 
     def update(self):
         if self.clicked:
             print("Key clicked")
-            #dissapear
-            #add key to player inventory 
-            
+            # dissapear
+            # add key to player inventory
+
     def onclick(self):
-        self.clicked=True
+        self.clicked = True

@@ -89,6 +89,12 @@ class PlayButton(Button):
         # return 2
 
 
+class BackButton(Button):
+    def mouse_click(self, calling):
+        calling.main_menu()
+        print("back to main menu")
+
+
 class SettingsButton(Button):
     def mouse_click(self, calling):
         # Go to main game loop.. but how?

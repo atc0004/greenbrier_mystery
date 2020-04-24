@@ -1,6 +1,6 @@
 import pygame
 from scenebase import SceneBase
-from objects import Box, Painting, Chair, Item, Gear, GearItem
+from objects import Box, Chair, Document, DocumentItem, Gear, GearItem, Item, Painting
 
 
 class Hall_Scene(SceneBase):
@@ -114,6 +114,11 @@ class Room_Scene(SceneBase):
         self.items_found = 0
         self.items_available = 2
         self.canAdvance = False
+        self.detail_image = pygame.image.load(
+            'assets/bunker_details.PNG').convert()
+        self.detail_rect = self.detail_image.get_rect(center=(w/2, h/2))
+        self.display_file_contents = False
+
     def ProcessInput(self, events, pressed_keys):
 
         for event in events:
@@ -123,10 +128,16 @@ class Room_Scene(SceneBase):
                     if item.rect.collidepoint(event.pos):
                         self.is_new_item = item.onclick()
                         if issubclass(self.is_new_item.__class__, Item):
+                            if isinstance(self.is_new_item, DocumentItem):
+                                print("Instance of document, show content")
+                            # self.screen.blit(self.detail_image, self.detail_rect)
+                                self.display_file_contents = True
                             self.player.add_item(self.is_new_item.name)
                             self.is_new_item = None
                             self.items_found += 1
-                        
+                if self.display_file_contents:
+                    self.display_file_contents = False
+
     def Update(self):
 
         if(self.counter == 0):
@@ -142,10 +153,12 @@ class Room_Scene(SceneBase):
         if pygame.mixer.get_busy():
             return
         screen.blit(self.bg_image, (self.bgX, 0))
+
         # for obj in self.objects_list:
         # obj.update()
         # obj.draw(self.screen)
-        if self.is_new_item is not None and self.items_found  < 2:
+        if self.is_new_item is not None and self.items_found < self.items_available:
+            # print(self.is_new_item)
             self.new_item_group.add(self.is_new_item)
             self.objects_list.append(self.is_new_item)
             self.new_item_group.update()
@@ -153,7 +166,9 @@ class Room_Scene(SceneBase):
 
         self.objects_group.update()
         self.objects_group.draw(self.screen)
-        
+        if self.display_file_contents:
+            self.screen.blit(self.detail_image, self.detail_rect)
+
     def SwitchToScene(self, next_scene):
         self.counter = 0
         self.next = next_scene
