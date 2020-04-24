@@ -131,7 +131,8 @@ class Game:
 
             user_interface.render()
             user_interface.update()
-
+            #user_interface.showTip()
+            
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()

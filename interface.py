@@ -71,6 +71,10 @@ class UI:
         self.frame_count = 0
         self.target_date = self.details['Time']
         self.curTime = self.target_date
+        
+        self.tiptimer = 100000
+        self.tiptimercounter = 0
+        self.displaytip = False
 
     def update(self):
         self.details = self.player.get_details()
@@ -81,6 +85,13 @@ class UI:
         pygame.draw.rect(self.surface, self.black, self.surface.get_rect())
         self.render_player_details()
         self.render_watch()
+        
+        if self.displaytip:
+            self.tiptimercounter = self.tiptimercounter -1
+            if(self.tiptimercounter == 0):
+                self.displaytip = False
+                self.tiptimer = 100000
+            self.render_dialogue_view()
 
     def render_watch(self):
         # Need to render watch first, then render the hand rotating
@@ -93,7 +104,7 @@ class UI:
             self.small_hand, -self.frame_count*3).convert_alpha()
         rect = big.get_rect(center=self.face_center)
         rect2 = small.get_rect(center=self.face_center)
-        curTime = self.details['Time']
+        #curTime = self.details['Time']
         if self.curTime != self.target_date and self.date_changing:
             if self.target_date < self.curTime:
                 self.curTime -= 2
@@ -114,7 +125,22 @@ class UI:
         self.screen.blit(big, rect)
         self.screen.blit(small, rect2)
         pygame.display.flip()
-
+        
+    def render_dialogue_view(self):
+        white = (255, 255, 255)
+        
+        tips = ['Maybe I should look around. Move with a and d.', 'I can use my watch with t, maybe that will help me.', 'I should have a look around.']
+        dialogue_surface = self.font.render(
+            f"test", True, white)
+        #self.screen.blit(self.surface, (0, 0))
+        dialoguerect = dialogue_surface.getrect()
+        dialoguerect.center = (1000,500)
+        self.screen.blit(dialogue_surface, dialoguerect)
+        
+    def showTip(self):
+        self.displaytip = True
+        self.tiptimercounter = self.tiptimer
+        
     def render_player_details(self):
         self.screen.blit(self.surface, (0, 0))
         self.screen.blit(self.gear_image, self.gear_rect)
