@@ -46,7 +46,7 @@ class Game:
             ("Room_Scene", Room_Scene(self.player, self.screen))
         ]
         self.scene_names = ["Hallway", "Room_Scene"]
-        self.scene_num = 1
+        self.scene_num = 0
         self.current_scene = self.all_scenes[self.scene_num][1]
         self.collision_counter = 0
         self.bleedout_timer = 0
@@ -271,7 +271,7 @@ class Game:
         play_button = PlayButton(button1_rect, "PLAY",
                                  button_font, button1_img, button1_hover)
         settings_button = SettingsButton(
-            button2_rect, "SETTINGS", button_font, button2_img, button2_hover)
+            button2_rect, "CONTROLS", button_font, button2_img, button2_hover)
         exit_button = ExitButton(button3_rect, "EXIT",
                                  button_font, button3_img, button3_hover)
         all_buttons = [play_button, settings_button, exit_button]

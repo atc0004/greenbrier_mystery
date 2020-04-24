@@ -123,6 +123,8 @@ class Room_Scene(SceneBase):
 
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if self.display_file_contents:
+                    self.display_file_contents = False
                 print(event.pos)
                 for item in self.objects_list:
                     if item.rect.collidepoint(event.pos):
@@ -135,8 +137,6 @@ class Room_Scene(SceneBase):
                             self.player.add_item(self.is_new_item.name)
                             self.is_new_item = None
                             self.items_found += 1
-                if self.display_file_contents:
-                    self.display_file_contents = False
 
     def Update(self):
 
