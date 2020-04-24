@@ -15,20 +15,17 @@ class Game:
 
     Initializes pygame, the Screen, clock, room(s), and gets the scene list as of 2/13/2020
     """
-     #sounds
+    # sounds
     achievementS = 'sounds/effects/achievement.wav'
     doorOpenS = 'sounds/effects/door-open.wav'
-    slidings =  'sounds/effects/sliding.wav'
-
-    gameM = 'sounds/music/Greenbrier.m4a'
+    slidings = 'sounds/effects/sliding.wav'
 
     def __init__(self):
         os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
         # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
+        self.gameM = 'sounds/music/Greenbrier.wav'
 
-       
-        
         pygame.init()
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         pygame.mixer.music.set_volume(0.2)
@@ -53,7 +50,8 @@ class Game:
     """
 
     def main_loop(self):
-
+        pygame.mixer.music.load(self.gameM)
+        pygame.mixer.music.play(-1)
         my_group = pygame.sprite.Group(self.player)
         # hall = Hall_Scene(player, self.screen)
         user_interface = UI(self.screen, self.player, True)
@@ -103,7 +101,6 @@ class Game:
                 my_group.update()
                 my_group.draw(self.screen)
 
-            
             user_interface.render()
             user_interface.update()
 
@@ -114,7 +111,7 @@ class Game:
 
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
-        
+
         menuM = 'sounds/music/menuAmbiance.wav'
         pygame.mixer.music.load(menuM)
         pygame.mixer.music.play(-1)
@@ -176,8 +173,8 @@ Creates game object and runs the Game loop
 """
 if __name__ == '__main__':
     game = Game()
-    
-    pygame.mixer.init(44100, -16,2,2048)
+
+    pygame.mixer.init(44100, -16, 2, 2048)
 
     game.main_menu()
     # game.main_loop()
