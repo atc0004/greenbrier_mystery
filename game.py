@@ -110,16 +110,17 @@ class Game:
                         self.bleeding = True
                         self.bleedout_timer = 0
                     if event.key == pygame.K_RETURN:
-                        if(self.scene_num == 0):
-                            if(self.current_scene.canAdvance):  
-                                self.scene_num += 1
-                                if self.scene_num == len(self.all_scenes):
-                                    self.scene_num = 0
-                                self.current_scene.SwitchToScene(
-                                    self.all_scenes[self.scene_num][1])
-                                self.current_scene = self.all_scenes[self.scene_num][1]
-                                print(
-                                    f"Curr Scene {self.scene_num} : {self.current_scene}")
+                        # if(self.scene_num == 0):
+                        if(self.current_scene.canAdvance):  
+                            self.scene_num += 1
+                            if self.scene_num == len(self.all_scenes):
+                                self.scene_num = 0
+                            self.current_scene.SwitchToScene(
+                                self.all_scenes[self.scene_num][1])
+                            self.current_scene = self.all_scenes[self.scene_num][1]
+                            print(
+                                f"Curr Scene {self.scene_num} : {self.current_scene}")
+                    
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_d:
                         self.player.walking = False

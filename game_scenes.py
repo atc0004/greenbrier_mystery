@@ -112,7 +112,7 @@ class Room_Scene(SceneBase):
         self.is_new_item = None
         self.new_item_group = pygame.sprite.Group()
         self.items_found = 0
-        self.items_available = 1
+        self.items_available = 2
         self.canAdvance = False
     def ProcessInput(self, events, pressed_keys):
 
