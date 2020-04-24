@@ -158,30 +158,6 @@ class Game:
             pygame.display.update()
         pygame.quit()
         exit()
-        # get and process events
-
-    def handle_event(self, event):
-        if event.type == pygame.QUIT:
-            self.done = True
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                print("Right, next scene")
-                # self.room.get_next_scene()
-                self.room.scroll_right = True
-                # self.room.update_current_scene()
-
-            elif event.key == pygame.K_LEFT:
-
-                print("Left, previous scene")
-                self.room.get_prev_scene()
-            elif event.key == pygame.K_ESCAPE:
-                self.done = True
-        elif event.type == pygame.KEYUP:
-            self.room.scroll_right = False
-
-        else:
-            # pass
-            self.room.update_current_scene()
 
 
 """Main Runner
@@ -190,4 +166,4 @@ Creates game object and runs the Game loop
 if __name__ == '__main__':
     game = Game()
     game.main_menu()
-    game.main_loop()
+    # game.main_loop()
