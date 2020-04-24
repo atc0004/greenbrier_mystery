@@ -67,6 +67,8 @@ class Hall_Scene(SceneBase):
             self.box_onscreen = False
         if(self.bgX <= -1600):
             self.canAdvance = True
+        else:
+            self.canAdavance = False
         pygame.display.update()
 
     def Render(self, screen, sepia):
