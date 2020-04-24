@@ -22,7 +22,7 @@ class Button(object):
             screen.blit(self.hover_surface, self.button_rect)
         else:
             screen.blit(self.default_surface, self.button_rect)
-
+    
     def update(self):
         if self.button_highlighted:
             text_color = (255,255,255)
@@ -79,9 +79,10 @@ class Button(object):
 
 class PlayButton(Button):
     def mouse_click(self, calling):
+        pygame.mixer.music.stop()
         # Go to main game loop.. but how?
         calling.main_loop()
-        
+        pygame.mixer.music.load(gameM)
         print('clicked play')
         # return 2
 class SettingsButton(Button):

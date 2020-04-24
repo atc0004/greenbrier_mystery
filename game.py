@@ -1,7 +1,7 @@
 import pygame
 import os
 from button import PlayButton, SettingsButton, ExitButton
-from game_scenes import Hall_Scene
+from game_scenes import Hall_Scene, Room_Scene
 from player import Player
 from objects import Box
 from interface import UI
@@ -15,20 +15,35 @@ class Game:
 
     Initializes pygame, the Screen, clock, room(s), and gets the scene list as of 2/13/2020
     """
+     #sounds
+    achievementS = 'sounds/effects/achievement.wav'
+    doorOpenS = 'sounds/effects/door-open.wav'
+    slidings =  'sounds/effects/sliding.wav'
+
+    gameM = 'sounds/music/Greenbrier.m4a'
 
     def __init__(self):
         os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
         # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
+
+       
+        
         pygame.init()
-        # self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
-        self.screen = pygame.display.set_mode(
-            self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+        # self.screen = pygame.display.set_mode(
+        # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
         self.clock = pygame.time.Clock()
-        # self.scenes = self.room.scene_list
         self.menu = True
-        self.current_scene = None
+        self.player = Player(self.screen)
+        self.all_scenes = [
+            ("Hallway", Hall_Scene(self)),
+            ("Room_Scene", Room_Scene(self.player, self.screen))
+        ]
+        self.scene_names = ["Hallway", "Room_Scene"]
+        self.scene_num = 0
+        self.current_scene = self.all_scenes[self.scene_num][1]
         self.collision_counter = 0
 
     """Main Game Loop
@@ -37,10 +52,10 @@ class Game:
     """
 
     def main_loop(self):
-        player = Player(self.screen)
-        my_group = pygame.sprite.Group(player)
-        hall = Hall_Scene(player, self.screen)
-        user_interface = UI(self.screen, player, True)
+
+        my_group = pygame.sprite.Group(self.player)
+        # hall = Hall_Scene(player, self.screen)
+        user_interface = UI(self.screen, self.player, True)
         timechange = False
         # print(type(self.screen))
         while not self.done:
@@ -54,10 +69,19 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         quit_opt = True
                     if event.key == pygame.K_RIGHT:
-                        player.walking = True
+                        self.player.walking = True
+                    if event.key == pygame.K_RETURN:
+                        self.scene_num += 1
+                        if self.scene_num == len(self.all_scenes):
+                            self.scene_num = 0
+                        self.current_scene.SwitchToScene(
+                            self.all_scenes[self.scene_num][1])
+                        self.current_scene = self.all_scenes[self.scene_num][1]
+                        print(
+                            f"Curr Scene {self.scene_num} : {self.current_scene}")
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT:
-                        player.walking = False
+                        self.player.walking = False
                     if event.key == pygame.K_t:
                         # player.change_date()
                         user_interface.change_date()
@@ -67,21 +91,25 @@ class Game:
                 else:
                     events.append(event)
 
-            if hall.box_onscreen and hall.collides and self.collision_counter < 1:
-                # Hit the box, trigger the line
-                self.collision_counter += 1
-                # Should only print once
-                print("Hit box")
-
-            hall.ProcessInput(events, [])
-            hall.Update()
-            if player.details['Time'] == 1861:
+            self.current_scene.ProcessInput(events, [])
+            self.current_scene.Update()
+            if self.player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
+<<<<<<< HEAD
             self.screen.fill((0,0,0))
             hall.Render(self.screen, sepia)
             my_group.update()
             my_group.draw(self.screen)
+=======
+            self.current_scene.Render(self.screen, sepia)
+            if self.scene_num == 0:
+                # Show player
+                my_group.update()
+                my_group.draw(self.screen)
+
+            
+>>>>>>> room_scene
             user_interface.render()
             user_interface.update()
 
@@ -90,11 +118,13 @@ class Game:
         pygame.quit()
         exit()
 
-
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
-
-        gb_img = pygame.image.load('assets/menu_bg.PNG')
+        
+        menuM = 'sounds/music/menuAmbiance.wav'
+        pygame.mixer.music.load(menuM)
+        pygame.music.play(-1)
+        gb_img = pygame.image.load('assets/menu_bg.png')
         title_img = pygame.image.load('assets/title.png')
         title_rotate_image = title_img
         rect = title_img.get_rect()
@@ -145,30 +175,6 @@ class Game:
             pygame.display.update()
         pygame.quit()
         exit()
-        # get and process events
-
-    def handle_event(self, event):
-        if event.type == pygame.QUIT:
-            self.done = True
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                print("Right, next scene")
-                # self.room.get_next_scene()
-                self.room.scroll_right = True
-                # self.room.update_current_scene()
-
-            elif event.key == pygame.K_LEFT:
-
-                print("Left, previous scene")
-                self.room.get_prev_scene()
-            elif event.key == pygame.K_ESCAPE:
-                self.done = True
-        elif event.type == pygame.KEYUP:
-            self.room.scroll_right = False
-
-        else:
-            # pass
-            self.room.update_current_scene()
 
 
 """Main Runner
@@ -176,5 +182,8 @@ Creates game object and runs the Game loop
 """
 if __name__ == '__main__':
     game = Game()
+    
+    pygame.mixer.init(44100, -16,2,2048)
+
     game.main_menu()
-    game.main_loop()
+    # game.main_loop()
