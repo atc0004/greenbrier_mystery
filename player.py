@@ -57,7 +57,7 @@ class Player(pygame.sprite.Sprite):
             # if self.index >= len(self.images):
             if self.index >= 23:
                 self.index = 0
-            if self.x < self.w/2:
+            if self.x < self.w/2-1:
                 self.x += 4
             self.rect = pygame.Rect(self.x, self.y, 155, 395)
             self.image = self.images[self.index//6]

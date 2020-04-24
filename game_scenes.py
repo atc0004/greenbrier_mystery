@@ -95,7 +95,7 @@ class Hall_Scene(SceneBase):
             self.bgX -= self.BG_SPEED
             # if self.box_onscreen:
             self.box.rect.x -= self.BG_SPEED
-        if self.moving_left and self.bgX < 0:
+        if self.moving_left and self.bgX < 0 and not self.collides:
             self.bgX += self.BG_SPEED
             # if self.box_onscreen:
             self.box.rect.x += self.BG_SPEED
