@@ -95,29 +95,22 @@ class GearItem(Item):
 class Chair(Interactable):
     def __init__(self, pos, image_path, screen, disappears, debug=False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
-        self.originalPos = True
-        self.oX = self.rect.x
-        self.oY = self.rect.y
+        self.max_move = 40
+        self.moved = 0
 
     def update(self):
         if self.clicked:
-            if self.originalPos is False:
-                self.rect.x = self.oX
-                self.rect.y = self.oY
-                originalPos = True
-            if(self.rect.x > 1200 or self.rect.y > 550 and originalPos is True):
+            if self.moved < self.max_move:
                 self.rect.x -= 1
                 self.rect.y -= 1
-
-            else:
-                self.originalPos = False
-                self.clicked = False
+                self.moved += 1
+        
 
     def onclick(self):
         if not self.clicked:
             self.clicked = True
 
-            return Document((self.rect.right, self.rect.bottom), 'assets/ui/folder.png', self.screen, True)
+            return Document((self.rect.right-75, self.rect.centery), 'assets/ui/folder.png', self.screen, True)
 
 
 class Document(Interactable):
