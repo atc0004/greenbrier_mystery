@@ -48,6 +48,8 @@ class Game:
         self.scene_num = 0
         self.current_scene = self.all_scenes[self.scene_num][1]
         self.collision_counter = 0
+        self.bleedout_timer = 0
+        self.bleeding = False
 
     """Main Game Loop
 
@@ -66,6 +68,22 @@ class Game:
             sepia = False
             events = []
             quit_opt = False
+            
+            if self.bleeding:
+                self.bleedout_timer += 1
+                if (self.bleedout_timer%2 == 0):
+                    #moving backwards
+                    if self.player.details['Time'] != 1861:
+                        self.screen.fill((240  , 208, 2))
+                        user_interface.render()
+                        user_interface.update()
+                    else:#moving forward in time 
+                        self.screen.fill((106, 194, 252))
+                        user_interface.render()
+                        user_interface.update()
+            if self.bleedout_timer > 30:
+                self.bleeding = False
+                self.bleedout_timer = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit_opt = True
@@ -90,8 +108,10 @@ class Game:
                         # player.change_date()
                         user_interface.change_date()
                         timechange = True
-                        
+                        self.bleeding = True
+                        self.bleedout_timer = 0
                         self.timeTravel.play()
+
                 if quit_opt:
                     self.done = True
                 else:
@@ -102,6 +122,7 @@ class Game:
             if self.player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
+                
             self.current_scene.Render(self.screen, sepia)
             if self.scene_num == 0:
                 # Show player
