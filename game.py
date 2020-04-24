@@ -29,7 +29,7 @@ class Game:
         self.menu = True
         self.player = Player(self.screen)
         self.all_scenes = [
-            ("Hallway", Hall_Scene(self.player, self.screen)),
+            ("Hallway", Hall_Scene(self)),
             ("Room_Scene", Room_Scene(self.player, self.screen))
         ]
         self.scene_names = ["Hallway", "Room_Scene"]
@@ -94,8 +94,12 @@ class Game:
                 # Apply overlay
                 sepia = True
             self.current_scene.Render(self.screen, sepia)
-            my_group.update()
-            my_group.draw(self.screen)
+            if self.scene_num == 0:
+                # Show player
+                my_group.update()
+                my_group.draw(self.screen)
+
+            
             user_interface.render()
             user_interface.update()
 
