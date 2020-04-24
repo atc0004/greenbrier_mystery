@@ -28,11 +28,12 @@ class Game:
         pygame.init()
         # sound
         self.gameM = 'sounds/music/Greenbrier.wav'
-        self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel.wav')
+        self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel_short.wav')
         self.timeTravel.set_volume(0.1)
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         pygame.display.set_caption('The Greenbrier - A Mystery In Time')
         pygame.mixer.music.set_volume(0.01)
+        pygame.mixer.fadeout(500)
         # self.screen = pygame.display.set_mode(
         # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
@@ -73,7 +74,7 @@ class Game:
 
             if self.bleeding:
                 self.bleedout_timer += 1
-                if (self.bleedout_timer % 2 == 0):
+                if (self.bleedout_timer % 10 == 0):
                     # moving backwards
                     if self.player.details['Time'] != 1861:
                         self.screen.fill((240, 208, 2))
@@ -83,7 +84,7 @@ class Game:
                         self.screen.fill((106, 194, 252))
                         user_interface.render()
                         user_interface.update()
-            if self.bleedout_timer > 30:
+            if self.bleedout_timer > 60:
                 self.bleeding = False
                 self.bleedout_timer = 0
             for event in pygame.event.get():
@@ -101,6 +102,13 @@ class Game:
                         self.player.walking = True
                     if event.key == pygame.K_a:
                         self.player.walking_left = True
+                    if event.key == pygame.K_t:
+                        # player.change_date()
+                        self.timeTravel.play()
+                        user_interface.change_date()
+                        timechange = True
+                        self.bleeding = True
+                        self.bleedout_timer = 0
                     if event.key == pygame.K_RETURN:
                         if(self.scene_num == 0):
                             if(self.current_scene.canAdvance):  
@@ -119,13 +127,7 @@ class Game:
                     if event.key == pygame.K_a:
                         self.player.walking_left = False
                         
-                    if event.key == pygame.K_t:
-                        # player.change_date()
-                        user_interface.change_date()
-                        timechange = True
-                        self.bleeding = True
-                        self.bleedout_timer = 0
-                        self.timeTravel.play()
+                    
 
                 if quit_opt:
                     self.done = True
