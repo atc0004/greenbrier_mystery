@@ -78,6 +78,7 @@ class Game:
             if player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
+            self.screen.fill((0,0,0))
             hall.Render(self.screen, sepia)
             my_group.update()
             my_group.draw(self.screen)
@@ -85,7 +86,7 @@ class Game:
             user_interface.update()
 
             pygame.display.flip()
-            self.clock.tick(120)
+            self.clock.tick(60)
         pygame.quit()
         exit()
 

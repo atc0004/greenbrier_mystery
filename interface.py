@@ -107,13 +107,13 @@ class UI:
         if self.frame_count >= 360:
             # print("360")
             self.frame_count = 0
-        pygame.display.flip()
         self.screen.blit(self.watch_image, self.watch_rect)
         self.screen.blit(self.date_surface, self.date_rect)
         pygame.draw.circle(self.screen, (0, 0, 0), self.face_center, 5)
 
         self.screen.blit(big, rect)
         self.screen.blit(small, rect2)
+        pygame.display.flip()
 
     def render_player_details(self):
         self.screen.blit(self.surface, (0, 0))
