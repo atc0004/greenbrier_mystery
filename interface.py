@@ -19,10 +19,10 @@ class UI:
         self.date_changing = False
 
         self.w, self.h = pygame.display.get_surface().get_size()
-        self.folder_image = pygame.image.load('assets/ui/folder.png')
-        self.gear_image = pygame.image.load('assets/ui/gear.png')
-        self.key_image = pygame.image.load('assets/ui/key.png')
-        self.note_image = pygame.image.load('assets/ui/note.png')
+        self.folder_image = pygame.image.load('assets/ui/folder.png').convert_alpha()
+        self.gear_image = pygame.image.load('assets/ui/gear.png').convert_alpha()
+        self.key_image = pygame.image.load('assets/ui/key.png').convert_alpha()
+        self.note_image = pygame.image.load('assets/ui/note.png').convert_alpha()
 
         self.folder_image = pygame.transform.smoothscale(
             self.folder_image, (60, 60))
@@ -45,15 +45,15 @@ class UI:
         self.gear_rect.centery = self.h * (1/6)
         self.folder_rect.centery = self.h * (2/6)
         self.key_rect.centery = self.h * (1/2)
-        self.watch_image = pygame.image.load('assets/ui/watch.png')
+        self.watch_image = pygame.image.load('assets/ui/watch.png').convert_alpha()
         x, y = self.watch_image.get_rect().size
         self.watch_image = pygame.transform.smoothscale(
             self.watch_image, (int(x*.3), int(y*.3)))
-        self.small_hand = pygame.image.load('assets/ui/short_hand.png')
+        self.small_hand = pygame.image.load('assets/ui/short_hand.png').convert_alpha()
         x, y = self.small_hand.get_rect().size
         self.small_hand = pygame.transform.smoothscale(
             self.small_hand, (int(x*.25), int(y*.25)))
-        self.big_hand = pygame.image.load('assets/ui/big_hand.png')
+        self.big_hand = pygame.image.load('assets/ui/big_hand.png').convert_alpha()
         x, y = self.big_hand.get_rect().size
         self.big_hand = pygame.transform.smoothscale(
             self.big_hand, (int(x*.25), int(y*.25)))

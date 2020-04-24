@@ -12,8 +12,8 @@ class Hall_Scene(SceneBase):
 
         self.moving = False
         self.bgX = 0
-        self.bg_image = pygame.image.load('assets/scene_1.png')
-        self.bg_sepia = pygame.image.load('assets/hall_sepia.png')
+        self.bg_image = pygame.image.load('assets/scene_1.png').convert_alpha()
+        self.bg_sepia = pygame.image.load('assets/hall_sepia.png').convert_alpha()
         self.edge_X = self.bgX + 1920
         self.box_relative_position = 0
         self.collides = False
@@ -78,7 +78,7 @@ class Room_Scene(SceneBase):
         self.player = player
         self.screen = screen
         self.bgX = 0
-        self.bg_image = pygame.image.load('assets/bedroom.png')
+        self.bg_image = pygame.image.load('assets/bedroom.png').convert_alpha()
         self.counter = 0
         self.doorOpenS = 'sounds/effects/door-open.wav'
         w, h = pygame.display.get_surface().get_size()

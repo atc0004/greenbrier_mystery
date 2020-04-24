@@ -5,7 +5,7 @@ import pygame
 class Objects(pygame.sprite.Sprite):
     def __init__(self, pos, image_path, screen, debug=False):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(image_path)
+        self.image = pygame.image.load(image_path).convert_alpha()
         self.rect = self.image.get_rect().move(pos)
         self.screen=screen
         # self.area = self.screen.get_rect()

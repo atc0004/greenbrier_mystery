@@ -7,12 +7,12 @@ class Player(pygame.sprite.Sprite):
         self.walking = False
         self.screen = screen
         self.images = []
-        self.standing_image = pygame.image.load('assets/characters/boy.png')
+        self.standing_image = pygame.image.load('assets/characters/boy.png').convert_alpha()
         self.x = 120
         self.y = 600
         for x in range(0, 5):
             print(x)
-            i = pygame.image.load(f'assets/characters/boy_{x}.png')
+            i = pygame.image.load(f'assets/characters/boy_{x}.png').convert_alpha()
             self.images.append(pygame.transform.flip(i, True, False))
         self.current_time = 1961
         # Player details, for now it just has the demo stuff
