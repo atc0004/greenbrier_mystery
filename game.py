@@ -116,7 +116,7 @@ class Game:
         
         menuM = 'sounds/music/menuAmbiance.wav'
         pygame.mixer.music.load(menuM)
-        pygame.music.play(-1)
+        pygame.mixer.music.play(-1)
         gb_img = pygame.image.load('assets/menu_bg.png')
         title_img = pygame.image.load('assets/title.png')
         title_rotate_image = title_img
