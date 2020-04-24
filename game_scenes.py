@@ -70,6 +70,7 @@ class Hall_Scene(SceneBase):
 class Room_Scene(SceneBase):
     def __init__(self):
         SceneBase.__init__(self)
+        
 
     def ProcessInput(self, events, pressed_keys):
         pass

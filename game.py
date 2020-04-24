@@ -1,16 +1,15 @@
 import pygame
 import os
 from button import PlayButton, SettingsButton, ExitButton
-from game_scenes import Hall_Scene
+from game_scenes import Hall_Scene, Room_Scene
 from player import Player
 from objects import Box
 from interface import UI
 
-
 class Game:
     """ Game Class that is the master to all other game content
     """
-
+    
     """Game initializer
 
     Initializes pygame, the Screen, clock, room(s), and gets the scene list as of 2/13/2020
@@ -21,13 +20,16 @@ class Game:
         # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
         pygame.init()
-        # self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
-        self.screen = pygame.display.set_mode(
-            self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+        # self.screen = pygame.display.set_mode(
+            # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
         self.clock = pygame.time.Clock()
-        # self.scenes = self.room.scene_list
         self.menu = True
+        self.all_scenes = {
+          "Hallway": Hall_Scene(player, self.screen),
+          "Room_Scene": Room_Scene(player, self.screen)
+        }
         self.current_scene = None
         self.collision_counter = 0
 
@@ -39,7 +41,7 @@ class Game:
     def main_loop(self):
         player = Player(self.screen)
         my_group = pygame.sprite.Group(player)
-        hall = Hall_Scene(player, self.screen)
+        # hall = Hall_Scene(player, self.screen)
         user_interface = UI(self.screen, player, True)
         timechange = False
         # print(type(self.screen))
@@ -93,7 +95,7 @@ class Game:
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
 
-        gb_img = pygame.image.load('assets/menu_bg.PNG')
+        gb_img = pygame.image.load('assets/menu_bg.png')
         title_img = pygame.image.load('assets/title.png')
         title_rotate_image = title_img
         rect = title_img.get_rect()
