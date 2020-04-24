@@ -18,12 +18,12 @@ class Objects(pygame.sprite.Sprite):
 
 
 class Interactable(Objects):
-    def __init__(self, pos, image_path, screen, debug=False):
+    def __init__(self, pos, image_path, screen, dissapears, debug=False):
         Objects.__init__(self, pos, image_path, screen, debug)
         self.interactable = True
 
     def update(self):
-        print("Update Method not overridden")
+        print("Override OnClick method.")
 
     def onclick(self):
         print("Override OnClick method.")
