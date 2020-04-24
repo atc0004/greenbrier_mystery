@@ -100,11 +100,11 @@ class Room_Scene(SceneBase):
                         item.onclick()
 
     def Update(self):
-      
+
         if(self.counter == 0):
-          pygame.mixer.music.load(self.doorOpenS)
-          pygame.mixer.music.play(0)
-          self.counter = 1
+            pygame.mixer.music.load(self.doorOpenS)
+            pygame.mixer.music.play(0)
+            self.counter = 1
         #print("uh-oh, you didn't override this in the child class")
 
     def Render(self, screen, sepia):
