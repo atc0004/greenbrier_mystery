@@ -4,19 +4,22 @@ from objects import Box, Painting
 
 
 class Hall_Scene(SceneBase):
-    def __init__(self, player, screen):
+    def __init__(self, game):
         SceneBase.__init__(self)
+        self.game = game
+        self.player = self.game.player
+        self.screen = self.game.screen
+
         self.moving = False
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/scene_1.png')
         self.bg_sepia = pygame.image.load('assets/hall_sepia.png')
         self.edge_X = self.bgX + 1920
         self.box_relative_position = 0
-        self.player = player
         self.collides = False
-        self.screen = screen
         self.box = Box((1921, 775), 'assets/classifiedcrate.png',
                            self.screen, True)
+        self.box_group = pygame.sprite.Group(self.box)
         self.box_onscreen = False
         
 
@@ -35,6 +38,22 @@ class Hall_Scene(SceneBase):
             if self.box_onscreen:
                 self.box.rect.x -= 6
         self.edge_X = self.bgX + 1920
+        if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
+            # Render the box
+            
+            self.box_onscreen = True
+            # collisions = pygame.sprite.spritecollide(
+                # self.player, self.box_group, False, collided=None)
+            self.collides = False
+            if len(collisions) != 0:
+                self.player.walking = False
+                self.moving = False
+                self.collides = True
+                if isinstance(collisions[0], Box):
+                    pass
+
+
+
         pygame.display.update()
 
     def Render(self, screen, sepia):
@@ -43,21 +62,21 @@ class Hall_Scene(SceneBase):
         else:
             screen.blit(self.bg_image, (self.bgX, 0))
 
-        if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
-            # Render the box
+        # if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
+        #     # Render the box
             
-            self.box_onscreen = True
-            obj_group = pygame.sprite.Group(self.box)
-            collisions = pygame.sprite.spritecollide(
-                self.player, obj_group, False, collided=None)
-            self.collides = False
-            if len(collisions) != 0:
-                self.player.walking = False
-                self.moving = False
-                self.collides = True
-                if isinstance(collisions[0], Box):
-                    pass
+        #     self.box_onscreen = True
+        #     # collisions = pygame.sprite.spritecollide(
+        #         # self.player, self.box_group, False, collided=None)
+        #     self.collides = False
+        #     if len(collisions) != 0:
+        #         self.player.walking = False
+        #         self.moving = False
+        #         self.collides = True
+        #         if isinstance(collisions[0], Box):
+        #             pass
                     # Show message to player to go back in time, box fades away, player can move forward
+          if self.box_onscreen:
             obj_group.update()
             obj_group.draw(screen)
         else:
@@ -74,6 +93,8 @@ class Room_Scene(SceneBase):
         self.screen = screen
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/bedroom.png')
+        self.counter = 0
+        self.doorOpenS = 'sounds/effects/door-open.wav'
 
 
         self.frameClicked = False
@@ -93,7 +114,12 @@ class Room_Scene(SceneBase):
                 item.onclick()
 
     def Update(self):
-        print("uh-oh, you didn't override this in the child class")
+      
+        if(self.counter == 0):
+          pygame.mixer.music.load(self.doorOpenS)
+          pygame.mixer.music.play(0)
+          self.counter = 1
+        #print("uh-oh, you didn't override this in the child class")
 
     def Render(self, screen, sepia):
         screen.blit(self.bg_image, (self.bgX, 0))
@@ -101,4 +127,5 @@ class Room_Scene(SceneBase):
         self.objects_group.draw(self.screen)
 
     def SwitchToScene(self, next_scene):
+        self.counter = 0
         self.next = next_scene

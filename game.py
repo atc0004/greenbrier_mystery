@@ -20,6 +20,15 @@ class Game:
         os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
         # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
+
+        #sounds
+        achievementS = 'sounds/effects/achievement.wav'
+        doorOpenS = 'sounds/effects/door-open.wav'
+        slidings =  'sounds/effects/sliding.wav'
+
+        menuM = 'sounds/music/menuAmbiance.wav'
+        gameM = 'sounds/music/Greenbrier.m4a'
+        
         pygame.init()
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         # self.screen = pygame.display.set_mode(
@@ -29,7 +38,7 @@ class Game:
         self.menu = True
         self.player = Player(self.screen)
         self.all_scenes = [
-            ("Hallway", Hall_Scene(self.player, self.screen)),
+            ("Hallway", Hall_Scene(self)),
             ("Room_Scene", Room_Scene(self.player, self.screen))
         ]
         self.scene_names = ["Hallway", "Room_Scene"]
@@ -82,20 +91,18 @@ class Game:
                 else:
                     events.append(event)
 
-            # if self.current_scene.box_onscreen and self.current_scene.collides and self.collision_counter < 1:
-            #     # Hit the box, trigger the line
-            #     self.collision_counter += 1
-            #     # Should only print once
-            #     print("Hit box")
-
             self.current_scene.ProcessInput(events, [])
             self.current_scene.Update()
             if self.player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
             self.current_scene.Render(self.screen, sepia)
-            my_group.update()
-            my_group.draw(self.screen)
+            if self.scene_num == 0:
+                # Show player
+                my_group.update()
+                my_group.draw(self.screen)
+
+            
             user_interface.render()
             user_interface.update()
 
@@ -106,7 +113,8 @@ class Game:
 
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
-
+        pygame.mixer.music.load(menuM)
+        pygame.music.play(-1)
         gb_img = pygame.image.load('assets/menu_bg.png')
         title_img = pygame.image.load('assets/title.png')
         title_rotate_image = title_img
