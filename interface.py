@@ -18,6 +18,8 @@ class UI:
         self.date_font = pygame.font.Font(
             'assets/fonts/Cheap_Pine_Sans.otf', 20)
         self.date_changing = False
+        self.popUpSound = pygame.mixer.Sound('sounds/effects/pop-up.wav')
+        self.popUpSound.set_volume(0.1)
 
         self.w, self.h = pygame.display.get_surface().get_size()
         self.folder_image = pygame.image.load(
@@ -149,6 +151,8 @@ class UI:
         pygame.display.flip()
 
     def render_dialogue_view(self):
+        if pygame.mixer.get_busy():
+            return
         white = (255, 255, 255)
 
         dialogue_surface = self.talkfont.render(
@@ -159,6 +163,8 @@ class UI:
         self.screen.blit(dialogue_surface, dialoguerect)
 
     def render_room_dialogue(self):
+        if pygame.mixer.get_busy():
+            return
         white = (255, 255, 255)
         dialogue_surface = self.talkfont.render(
             f"{self.roomtips[self.roomtipcount]}", True, white)
@@ -171,13 +177,16 @@ class UI:
         if x == -1:
             self.diaplyroomtip = False
         if x == 1:
+            self.popUpSound.play()
             self.roomtipcount = 0
             self.displayroomtip = True
 
         if x == 2:
+            self.popUpSound.play()
             self.roomtipcount = 1
             self.displayroomtip = True
         if x == 3:
+            self.popUpSound.play()
             self.roomtipcount = 2
             self.displayroomtip = True
 
@@ -187,6 +196,8 @@ class UI:
         self.tipCount += 1
         if self.tipCount >= len(self.tips):
             self.displaytip = False
+        else:
+            self.popUpSound.play()
 
         # self.tiptimercounter = self.tiptimer
 
