@@ -6,10 +6,11 @@ from player import Player
 from objects import Box
 from interface import UI
 
+
 class Game:
     """ Game Class that is the master to all other game content
     """
-    
+
     """Game initializer
 
     Initializes pygame, the Screen, clock, room(s), and gets the scene list as of 2/13/2020
@@ -22,15 +23,18 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         # self.screen = pygame.display.set_mode(
-            # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
+        # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
         self.clock = pygame.time.Clock()
         self.menu = True
-        self.all_scenes = {
-          "Hallway": Hall_Scene(player, self.screen),
-          "Room_Scene": Room_Scene(player, self.screen)
-        }
-        self.current_scene = None
+        self.player = Player(self.screen)
+        self.all_scenes = [
+            ("Hallway", Hall_Scene(self.player, self.screen)),
+            ("Room_Scene", Room_Scene(self.player, self.screen))
+        ]
+        self.scene_names = ["Hallway", "Room_Scene"]
+        self.scene_num = 0
+        self.current_scene = self.all_scenes[self.scene_num][1]
         self.collision_counter = 0
 
     """Main Game Loop
@@ -39,10 +43,10 @@ class Game:
     """
 
     def main_loop(self):
-        player = Player(self.screen)
-        my_group = pygame.sprite.Group(player)
+
+        my_group = pygame.sprite.Group(self.player)
         # hall = Hall_Scene(player, self.screen)
-        user_interface = UI(self.screen, player, True)
+        user_interface = UI(self.screen, self.player, True)
         timechange = False
         # print(type(self.screen))
         while not self.done:
@@ -56,10 +60,19 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         quit_opt = True
                     if event.key == pygame.K_RIGHT:
-                        player.walking = True
+                        self.player.walking = True
+                    if event.key == pygame.K_RETURN:
+                        self.scene_num += 1
+                        if self.scene_num == len(self.all_scenes):
+                            self.scene_num = 0
+                        self.current_scene.SwitchToScene(
+                            self.all_scenes[self.scene_num][1])
+                        self.current_scene = self.all_scenes[self.scene_num][1]
+                        print(
+                            f"Curr Scene {self.scene_num} : {self.current_scene}")
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT:
-                        player.walking = False
+                        self.player.walking = False
                     if event.key == pygame.K_t:
                         # player.change_date()
                         user_interface.change_date()
@@ -69,18 +82,18 @@ class Game:
                 else:
                     events.append(event)
 
-            if hall.box_onscreen and hall.collides and self.collision_counter < 1:
-                # Hit the box, trigger the line
-                self.collision_counter += 1
-                # Should only print once
-                print("Hit box")
+            # if self.current_scene.box_onscreen and self.current_scene.collides and self.collision_counter < 1:
+            #     # Hit the box, trigger the line
+            #     self.collision_counter += 1
+            #     # Should only print once
+            #     print("Hit box")
 
-            hall.ProcessInput(events, [])
-            hall.Update()
-            if player.details['Time'] == 1861:
+            self.current_scene.ProcessInput(events, [])
+            self.current_scene.Update()
+            if self.player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
-            hall.Render(self.screen, sepia)
+            self.current_scene.Render(self.screen, sepia)
             my_group.update()
             my_group.draw(self.screen)
             user_interface.render()
@@ -90,7 +103,6 @@ class Game:
             self.clock.tick(120)
         pygame.quit()
         exit()
-
 
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print

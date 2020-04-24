@@ -22,7 +22,7 @@ class Button(object):
             screen.blit(self.hover_surface, self.button_rect)
         else:
             screen.blit(self.default_surface, self.button_rect)
-
+    
     def update(self):
         if self.button_highlighted:
             text_color = (255,255,255)
