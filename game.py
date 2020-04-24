@@ -96,12 +96,6 @@ class Game:
             if self.player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
-<<<<<<< HEAD
-            self.screen.fill((0,0,0))
-            hall.Render(self.screen, sepia)
-            my_group.update()
-            my_group.draw(self.screen)
-=======
             self.current_scene.Render(self.screen, sepia)
             if self.scene_num == 0:
                 # Show player
@@ -109,7 +103,6 @@ class Game:
                 my_group.draw(self.screen)
 
             
->>>>>>> room_scene
             user_interface.render()
             user_interface.update()
 
