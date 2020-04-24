@@ -80,7 +80,7 @@ class Gear(Interactable):
     def onclick(self):
         if not self.clicked:
             self.clicked = True
-            self.kill()
+            self.kill() 
             return GearItem()
         # Need to give player aonother Gear
         # return Gear?(self.pos, 'assets/ui/gear.png', self.screen, True, )

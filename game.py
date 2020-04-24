@@ -52,7 +52,7 @@ class Game:
         self.collision_counter = 0
         self.bleedout_timer = 0
         self.bleeding = False
-        self.model_chosen = 'boy'
+        self.model_chosen = 'girl'
 
     """Main Game Loop
 
