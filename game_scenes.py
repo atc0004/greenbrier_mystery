@@ -114,8 +114,8 @@ class Room_Scene(SceneBase):
             self.counter = 1
             pygame.mixer
 
-            while pygame.mixer.get_busy():
-                pass
+            # while pygame.mixer.get_busy():
+                # pass
 
         #print("uh-oh, you didn't override this in the child class")
 

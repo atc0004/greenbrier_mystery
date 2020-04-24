@@ -123,7 +123,6 @@ class Game:
             if self.player.details['Time'] == 1861:
                 # Apply overlay
                 sepia = True
-                
             self.current_scene.Render(self.screen, sepia)
             if self.scene_num == 0:
                 # Show player
