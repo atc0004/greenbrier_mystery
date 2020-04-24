@@ -66,6 +66,8 @@ class Hall_Scene(SceneBase):
             self.box_onscreen = False
         if(self.bgX <= -1600):
             self.canAdvance = True
+        else:
+            self.canAdavance = False
         pygame.display.update()
 
     def Render(self, screen, sepia):
@@ -140,7 +142,7 @@ class Room_Scene(SceneBase):
         # obj.update()
         # obj.draw(self.screen)
         self.objects_group.update()
-        self.objects_group.draw(self.screen)
+        self.objects_group.draw(self.screen)    
 
     def SwitchToScene(self, next_scene):
         self.counter = 0

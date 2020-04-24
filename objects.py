@@ -56,10 +56,47 @@ class Painting(Interactable):
 class Chair(Interactable):
     def __init__(self, pos, image_path, screen, disappears, debug = False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
+        self.originalPos = True
+        self.oX = self.rect.x
+        self.oY = self.rect.y
+    def update(self):
+        if self.clicked:
+            if self.originalPos is False:
+                self.rect.x = self.oX
+                self.rect.y = self.oY
+                originalPos = True
+            if(self.rect.x > 1200 or self.rect.y > 550):
+                self.rect.x -= 1
+                self.rect.y -= 1
+                
+            else:
+                self.originalPos = False
+                self.clicked = False
+                
+    def onclick(self):
+        self.clicked=True
+
+class Document(Interactable):
+    def __init__(self, pos, image_path, screen, disappears, debug = False):
+        Interactable.__init__(self, pos, image_path, screen, disappears, debug)
 
     def update(self):
         if self.clicked:
-            print("Chair clicked")
+            print("Document clicked")
+            #display text blurb/info
+            #dissappear
+    def onclick(self):
+        self.clicked=True
+    
+class Key(Interactable):
+    def __init__(self, pos, image_path, screen, disappears, debug = False):
+        Interactable.__init__(self, pos, image_path, screen, disappears, debug)
 
+    def update(self):
+        if self.clicked:
+            print("Key clicked")
+            #dissapear
+            #add key to player inventory 
+            
     def onclick(self):
         self.clicked=True
