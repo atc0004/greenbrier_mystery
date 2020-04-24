@@ -31,6 +31,7 @@ class Game:
         
         pygame.init()
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+        pygame.mixer.music.set_volume(0.2)
         # self.screen = pygame.display.set_mode(
         # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
