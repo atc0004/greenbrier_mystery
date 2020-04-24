@@ -14,15 +14,19 @@ class UI:
         self.surface = pygame.Surface((100, 1200), pygame.SRCALPHA)
         self.rect = pygame.Rect((0, 0), (100, 1200))
         self.font = pygame.font.Font('assets/fonts/Cheap_Pine_Sans.otf', 30)
+        self.talkfont =  pygame.font.Font('assets/fonts/Cheap_Pine_Sans.otf', 28)
         self.date_font = pygame.font.Font(
             'assets/fonts/Cheap_Pine_Sans.otf', 20)
         self.date_changing = False
 
         self.w, self.h = pygame.display.get_surface().get_size()
-        self.folder_image = pygame.image.load('assets/ui/folder.png').convert_alpha()
-        self.gear_image = pygame.image.load('assets/ui/gear.png').convert_alpha()
+        self.folder_image = pygame.image.load(
+            'assets/ui/folder.png').convert_alpha()
+        self.gear_image = pygame.image.load(
+            'assets/ui/gear.png').convert_alpha()
         self.key_image = pygame.image.load('assets/ui/key.png').convert_alpha()
-        self.note_image = pygame.image.load('assets/ui/note.png').convert_alpha()
+        self.note_image = pygame.image.load(
+            'assets/ui/note.png').convert_alpha()
 
         self.folder_image = pygame.transform.smoothscale(
             self.folder_image, (60, 60))
@@ -45,15 +49,18 @@ class UI:
         self.gear_rect.centery = self.h * (1/6)
         self.folder_rect.centery = self.h * (2/6)
         self.key_rect.centery = self.h * (1/2)
-        self.watch_image = pygame.image.load('assets/ui/watch.png').convert_alpha()
+        self.watch_image = pygame.image.load(
+            'assets/ui/watch.png').convert_alpha()
         x, y = self.watch_image.get_rect().size
         self.watch_image = pygame.transform.smoothscale(
             self.watch_image, (int(x*.3), int(y*.3)))
-        self.small_hand = pygame.image.load('assets/ui/short_hand.png').convert_alpha()
+        self.small_hand = pygame.image.load(
+            'assets/ui/short_hand.png').convert_alpha()
         x, y = self.small_hand.get_rect().size
         self.small_hand = pygame.transform.smoothscale(
             self.small_hand, (int(x*.25), int(y*.25)))
-        self.big_hand = pygame.image.load('assets/ui/big_hand.png').convert_alpha()
+        self.big_hand = pygame.image.load(
+            'assets/ui/big_hand.png').convert_alpha()
         x, y = self.big_hand.get_rect().size
         self.big_hand = pygame.transform.smoothscale(
             self.big_hand, (int(x*.25), int(y*.25)))
@@ -67,14 +74,21 @@ class UI:
                             self.watch_rect.centery + 7)
         self.big_hand_rect.center = self.face_center
         self.small_hand_rect.center = self.face_center
-
+        self.player_char = pygame.image.load('assets/characters/boy.png').convert_alpha()
+        self.player_rect = self.player_char.get_rect(center=(300, self.h))
         self.frame_count = 0
         self.target_date = self.details['Time']
         self.curTime = self.target_date
+        self.text_box_image = pygame.transform.smoothscale(pygame.image.load(
+            'assets/ui/dialogue_info.png').convert_alpha(), (850, 125))
+        self.text_box_rect = self.text_box_image.get_rect(bottomleft=(0, self.h))
         
-        self.tiptimer = 100000
-        self.tiptimercounter = 0
-        self.displaytip = False
+        # self.tiptimer = 100000
+        # self.tiptimercounter = 0
+        self.displaytip = True
+        self.tipCount = 0
+        self.tips = ['Maybe I should look around. Move with a and d.',
+                     'I can use my watch with t, maybe that will help me.', 'I should have a look around.']
 
     def update(self):
         self.details = self.player.get_details()
@@ -84,14 +98,14 @@ class UI:
     def render(self):
         pygame.draw.rect(self.surface, self.black, self.surface.get_rect())
         self.render_player_details()
-        self.render_watch()
-        
+
+        self.render_text_box()
+        self.render_character_head()
         if self.displaytip:
-            self.tiptimercounter = self.tiptimercounter -1
-            if(self.tiptimercounter == 0):
-                self.displaytip = False
-                self.tiptimer = 100000
             self.render_dialogue_view()
+        self.render_watch()
+    def render_character_head(self):
+        self.screen.blit(self.player_char, self.player_rect)
 
     def render_watch(self):
         # Need to render watch first, then render the hand rotating
@@ -125,22 +139,27 @@ class UI:
         self.screen.blit(big, rect)
         self.screen.blit(small, rect2)
         pygame.display.flip()
-        
+
     def render_dialogue_view(self):
         white = (255, 255, 255)
-        
-        tips = ['Maybe I should look around. Move with a and d.', 'I can use my watch with t, maybe that will help me.', 'I should have a look around.']
-        dialogue_surface = self.font.render(
-            f"test", True, white)
+
+        dialogue_surface = self.talkfont.render(
+            f"{self.tips[self.tipCount]}", True, white)
         #self.screen.blit(self.surface, (0, 0))
-        dialoguerect = dialogue_surface.getrect()
-        dialoguerect.center = (1000,500)
+        dialoguerect = dialogue_surface.get_rect()
+        dialoguerect.topleft = (self.player_rect.centerx + self.player_rect.width/2, 0.93*self.h)
         self.screen.blit(dialogue_surface, dialoguerect)
-        
+
     def showTip(self):
-        self.displaytip = True
-        self.tiptimercounter = self.tiptimer
-        
+        # self.displaytip = True
+        self.tipCount += 1
+        if self.tipCount >= len(self.tips):
+            self.displaytip = False
+        # self.tiptimercounter = self.tiptimer
+
+    def render_text_box(self):
+        self.screen.blit(self.text_box_image, self.text_box_rect)
+
     def render_player_details(self):
         self.screen.blit(self.surface, (0, 0))
         self.screen.blit(self.gear_image, self.gear_rect)

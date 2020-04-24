@@ -63,7 +63,10 @@ class Game:
         user_interface = UI(self.screen, self.player, True)
         timechange = False
         # print(type(self.screen))
+        tip = False
+        pygame.time.set_timer(pygame.USEREVENT, 4000)
         while not self.done:
+
             sepia = False
             events = []
             quit_opt = False
@@ -86,6 +89,11 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit_opt = True
+                elif event.type == pygame.USEREVENT:
+                    # tip = False
+                    user_interface.showTip()
+                    pygame.time.set_timer(pygame.USEREVENT, 4000)
+
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         quit_opt = True
@@ -129,8 +137,9 @@ class Game:
 
             user_interface.render()
             user_interface.update()
-            #user_interface.showTip()
-            
+            # user_interface.render_dialogue_view()
+                # tip = False
+
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()
@@ -142,20 +151,22 @@ class Game:
         gb_img = pygame.image.load('assets/menu_bg.png').convert()
         button1_img = pygame.image.load('assets/button.png')
         button1_hover = pygame.image.load('assets/button_hover.png')
-        button_font = pygame.font.Font('./assets/fonts/Cheap_Pine_Sans.otf', 100)
+        button_font = pygame.font.Font(
+            './assets/fonts/Cheap_Pine_Sans.otf', 100)
         button1_rect = pygame.Rect(720, 840, 520, 170)
-        exit_button = ExitButton(button1_rect, "EXIT", button_font, button1_img, button1_hover)
+        exit_button = ExitButton(button1_rect, "EXIT",
+                                 button_font, button1_img, button1_hover)
         all_buttons = [exit_button]
-        #a_img
-        #d_img
-        #t_img
+        # a_img
+        # d_img
+        # t_img
         x = 0
         while x < 100:
             # render menu
             self.screen.blit(gb_img, (0, 0))
             for b in all_buttons:
                 b.draw(self.screen)
-            
+
             self.clock.tick(60)
             pygame.display.update()
             x = x+1
