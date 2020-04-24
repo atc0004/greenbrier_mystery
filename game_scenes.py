@@ -17,7 +17,7 @@ class Hall_Scene(SceneBase):
         self.edge_X = self.bgX + 1920
         self.box_relative_position = 0
         self.collides = False
-        self.box = Box((2100, 775), 'assets/classifiedcrate.png',
+        self.box = Box((2400, 775), 'assets/classifiedcrate.png',
                        self.screen, True)
         self.box_group = pygame.sprite.Group(self.box)
         self.box_onscreen = False
