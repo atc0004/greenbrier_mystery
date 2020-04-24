@@ -92,6 +92,7 @@ class PlayButton(Button):
 class SettingsButton(Button):
     def mouse_click(self, calling):
         # Go to main game loop.. but how?
+        calling.settings_menu()
         print('clicked settings')
 
 

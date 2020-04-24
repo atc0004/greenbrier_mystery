@@ -137,6 +137,32 @@ class Game:
         pygame.quit()
         exit()
 
+    def settings_menu(self):
+        print('settings menu starting')
+
+        gb_img = pygame.image.load('assets/menu_bg.png').convert()
+        button1_img = pygame.image.load('assets/button.png')
+        button1_hover = pygame.image.load('assets/button_hover.png')
+        button_font = pygame.font.Font('./assets/fonts/Cheap_Pine_Sans.otf', 100)
+        button1_rect = pygame.Rect(720, 840, 520, 170)
+        exit_button = ExitButton(button1_rect, "EXIT", button_font, button1_img, button1_hover)
+        all_buttons = [exit_button]
+        #a_img
+        #d_img
+        #t_img
+        x = 0
+        while x < 100:
+            # render menu
+            self.screen.blit(gb_img, (0, 0))
+            for b in all_buttons:
+                b.draw(self.screen)
+            
+            self.clock.tick(60)
+            pygame.display.update()
+            x = x+1
+        pygame.quit
+        exit()
+
     def main_menu(self):
         print('Main Menu Starting')  # Debug Print
 
