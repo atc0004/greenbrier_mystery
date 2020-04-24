@@ -27,6 +27,8 @@ class Game:
 
         pygame.init()
         # sound
+        self.user_interface = None
+
         self.gameM = 'sounds/music/Greenbrier.wav'
         self.timeTravel = pygame.mixer.Sound(
             'sounds/effects/timetravel_short.wav')
@@ -63,14 +65,14 @@ class Game:
         self.player = Player(self.screen, self.model_chosen)
         self.all_scenes = [
             ("Hallway", Hall_Scene(self)),
-            ("Room_Scene", Room_Scene(self.player, self.screen))
+            ("Room_Scene", Room_Scene(self))
         ]
         self.current_scene = self.all_scenes[self.scene_num][1]
         pygame.mixer.music.load(self.gameM)
         pygame.mixer.music.play(-1)
         my_group = pygame.sprite.Group(self.player)
         # hall = Hall_Scene(player, self.screen)
-        user_interface = UI(self.screen, self.player, True)
+        self.user_interface = UI(self.screen, self.player, True)
         timechange = False
         # print(type(self.screen))
         tip = False
@@ -87,12 +89,12 @@ class Game:
                     # moving backwards
                     if self.player.details['Time'] != 1861:
                         self.screen.fill((240, 208, 2))
-                        user_interface.render()
-                        user_interface.update()
+                        self.user_interface.render()
+                        self.user_interface.update()
                     else:  # moving forward in time
                         self.screen.fill((106, 194, 252))
-                        user_interface.render()
-                        user_interface.update()
+                        self.user_interface.render()
+                        self.user_interface.update()
             if self.bleedout_timer > 60:
                 self.bleeding = False
                 self.bleedout_timer = 0
@@ -101,7 +103,7 @@ class Game:
                     quit_opt = True
                 elif event.type == pygame.USEREVENT:
                     # tip = False
-                    user_interface.showTip()
+                    self.user_interface.showTip()
                     pygame.time.set_timer(pygame.USEREVENT, 4000)
 
                 elif event.type == pygame.KEYDOWN:
@@ -114,7 +116,7 @@ class Game:
                     if event.key == pygame.K_t:
                         # player.change_date()
                         self.timeTravel.play()
-                        user_interface.change_date()
+                        self.user_interface.change_date()
                         timechange = True
                         self.bleeding = True
                         self.bleedout_timer = 0
@@ -153,8 +155,8 @@ class Game:
                 my_group.update()
                 my_group.draw(self.screen)
 
-            user_interface.render()
-            user_interface.update()
+            self.user_interface.render()
+            self.user_interface.update()
             # user_interface.render_dialogue_view()
             # tip = False
 

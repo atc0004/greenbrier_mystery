@@ -79,8 +79,7 @@ class UI:
         self.frame_count = 0
         self.target_date = self.details['Time']
         self.curTime = self.target_date
-        self.text_box_image = pygame.transform.smoothscale(pygame.image.load(
-            'assets/ui/dialogue_info.png').convert_alpha(), (850, 125))
+        self.text_box_image = pygame.transform.smoothscale(pygame.image.load('assets/ui/dialogue_info.png').convert_alpha(), (850, 125))
         self.text_box_rect = self.text_box_image.get_rect(bottomleft=(0, self.h))
         
         # self.tiptimer = 100000
@@ -88,7 +87,13 @@ class UI:
         self.displaytip = True
         self.tipCount = 0
         self.tips = ['Maybe I should look around. Move with a and d.',
-                     'I can use my watch with t, maybe that will help me.', 'I should have a look around.']
+                     'I can use my watch with t, maybe that will help me.', 'I should have a look around.',
+                     "Oh no a crate is in my way"]
+
+        self.roomtips =["Look there's another gear for the watch!", "Hey look a classified file! I should read it",
+                        "I should try to find the old man again.."]
+        self.roomtipcount = -1
+        self.displayroomtip = False
 
     def update(self):
         self.details = self.player.get_details()
@@ -103,7 +108,10 @@ class UI:
         self.render_character_head()
         if self.displaytip:
             self.render_dialogue_view()
+        if self.displayroomtip:
+            self.render_room_dialogue()
         self.render_watch()
+
     def render_character_head(self):
         self.screen.blit(self.player_char, self.player_rect)
 
@@ -150,11 +158,36 @@ class UI:
         dialoguerect.topleft = (self.player_rect.centerx + self.player_rect.width/2, 0.93*self.h)
         self.screen.blit(dialogue_surface, dialoguerect)
 
+    def render_room_dialogue(self):
+        white = (255, 255, 255)
+        dialogue_surface = self.talkfont.render(
+            f"{self.roomtips[self.roomtipcount]}", True, white)
+        # self.screen.blit(self.surface, (0, 0))
+        dialoguerect = dialogue_surface.get_rect()
+        dialoguerect.topleft = (self.player_rect.centerx + self.player_rect.width / 2, 0.93 * self.h)
+        self.screen.blit(dialogue_surface, dialoguerect)
+
+    def showroomtip(self,x = -1):
+        if x == -1:
+            self.diaplyroomtip = False
+        if x == 1:
+            self.roomtipcount = 0
+            self.displayroomtip = True
+
+        if x == 2:
+            self.roomtipcount = 1
+            self.displayroomtip = True
+        if x == 3:
+            self.roomtipcount = 2
+            self.displayroomtip = True
+
+
     def showTip(self):
         # self.displaytip = True
         self.tipCount += 1
         if self.tipCount >= len(self.tips):
             self.displaytip = False
+
         # self.tiptimercounter = self.tiptimer
 
     def render_text_box(self):

@@ -54,7 +54,7 @@ class Character_Scene(SceneBase):
 
 
 class Hall_Scene(SceneBase):
-    def __init__(self, game):
+    def __init__(self,game):
         SceneBase.__init__(self)
         self.game = game
         self.player = self.game.player
@@ -139,10 +139,11 @@ class Hall_Scene(SceneBase):
 
 
 class Room_Scene(SceneBase):
-    def __init__(self, player, screen):
+    def __init__(self, game):
         SceneBase.__init__(self)
-        self.player = player
-        self.screen = screen
+        self.game = game
+        self.player = self.game.player
+        self.screen = self.game.screen
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/bedroom.png').convert_alpha()
         self.counter = 0
@@ -179,6 +180,10 @@ class Room_Scene(SceneBase):
                 for item in self.objects_list:
                     if item.rect.collidepoint(event.pos):
                         self.is_new_item = item.onclick()
+                        if isinstance(self.is_new_item, Document):
+                            self.game.user_interface.showroomtip(2)
+                        if isinstance(self.is_new_item, Gear):
+                            self.game.user_interface.showroomtip(1)
                         if issubclass(self.is_new_item.__class__, Item):
                             if isinstance(self.is_new_item, DocumentItem):
                                 print("Instance of document, show content")
@@ -204,6 +209,7 @@ class Room_Scene(SceneBase):
             return
         screen.blit(self.bg_image, (self.bgX, 0))
 
+
         # for obj in self.objects_list:
         # obj.update()
         # obj.draw(self.screen)
@@ -222,3 +228,4 @@ class Room_Scene(SceneBase):
     def SwitchToScene(self, next_scene):
         self.counter = 0
         self.next = next_scene
+        self.game.user_interface.showroomtip(3)
