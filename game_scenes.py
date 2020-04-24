@@ -9,8 +9,9 @@ class Hall_Scene(SceneBase):
         self.game = game
         self.player = self.game.player
         self.screen = self.game.screen
-
+        self.BG_SPEED = 4
         self.moving = False
+        self.w, self.h = pygame.display.get_surface().get_size()
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/scene_1.png').convert_alpha()
         self.bg_sepia = pygame.image.load('assets/hall_sepia.png').convert_alpha()
@@ -25,17 +26,17 @@ class Hall_Scene(SceneBase):
     def ProcessInput(self, events, pressed_keys):
 
         for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_d:
                 self.moving = True
-            if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+            if event.type == pygame.KEYUP and event.key == pygame.K_d:
                 self.moving = False
             self.Update()
 
     def Update(self):
-        if self.moving and not self.collides and self.player.x >= 900:
-            self.bgX -= 6
+        if self.moving and not self.collides and self.player.x > self.w/2-1:
+            self.bgX -= self.BG_SPEED
             # if self.box_onscreen:
-            self.box.rect.x -= 6
+            self.box.rect.x -= self.BG_SPEED
         self.edge_X = self.bgX + 1920
         if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
             # Render the box
@@ -120,6 +121,8 @@ class Room_Scene(SceneBase):
         #print("uh-oh, you didn't override this in the child class")
 
     def Render(self, screen, sepia):
+        if pygame.mixer.get_busy():
+            return
         screen.blit(self.bg_image, (self.bgX, 0))
         # for obj in self.objects_list:
         # obj.update()

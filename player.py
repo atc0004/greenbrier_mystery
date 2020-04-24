@@ -7,12 +7,15 @@ class Player(pygame.sprite.Sprite):
         self.walking = False
         self.screen = screen
         self.images = []
-        self.standing_image = pygame.image.load('assets/characters/boy.png').convert_alpha()
+        self.standing_image = pygame.image.load(
+            'assets/characters/boy.png').convert_alpha()
+        self.w, self.h = pygame.display.get_surface().get_size()
         self.x = 120
         self.y = 600
         for x in range(0, 5):
             print(x)
-            i = pygame.image.load(f'assets/characters/boy_{x}.png').convert_alpha()
+            i = pygame.image.load(
+                f'assets/characters/boy_{x}.png').convert_alpha()
             self.images.append(pygame.transform.flip(i, True, False))
         self.current_time = 1961
         # Player details, for now it just has the demo stuff
@@ -43,12 +46,12 @@ class Player(pygame.sprite.Sprite):
         if self.walking:
             self.index += 1
             # if self.index >= len(self.images):
-            if self.index >= 12:
+            if self.index >= 23:
                 self.index = 0
-            if self.x <= 900:
-                self.x += 8
+            if self.x < self.w/2:
+                self.x += 4
             self.rect = pygame.Rect(self.x, self.y, 155, 395)
-            self.image = self.images[self.index//3]
+            self.image = self.images[self.index//6]
             self.feet_coords = (
                 self.rect.center[0] - 300, self.rect.center[1]-30)
         else:
