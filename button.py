@@ -79,9 +79,10 @@ class Button(object):
 
 class PlayButton(Button):
     def mouse_click(self, calling):
+        pygame.mixer.music.stop()
         # Go to main game loop.. but how?
         calling.main_loop()
-        
+        pygame.mixer.music.load(gameM)
         print('clicked play')
         # return 2
 class SettingsButton(Button):

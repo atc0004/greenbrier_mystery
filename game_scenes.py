@@ -17,8 +17,13 @@ class Hall_Scene(SceneBase):
         self.edge_X = self.bgX + 1920
         self.box_relative_position = 0
         self.collides = False
+<<<<<<< HEAD
         self.box = Box((2100, 775), 'assets/classifiedcrate.png',
                        self.screen, True)
+=======
+        self.box = Box((1921, 775), 'assets/classifiedcrate.png',
+                           self.screen, True)
+>>>>>>> f3a75097771f9c6bb4c344e3b8f84cf7accf1edd
         self.box_group = pygame.sprite.Group(self.box)
         self.box_onscreen = False
 
@@ -41,8 +46,13 @@ class Hall_Scene(SceneBase):
             # Render the box
 
             self.box_onscreen = True
+<<<<<<< HEAD
             collisions = pygame.sprite.spritecollide(
                 self.player, self.box_group, False, collided=None)
+=======
+            # collisions = pygame.sprite.spritecollide(
+                # self.player, self.box_group, False, collided=None)
+>>>>>>> f3a75097771f9c6bb4c344e3b8f84cf7accf1edd
             self.collides = False
             if len(collisions) != 0:
                 self.player.walking = False
@@ -50,8 +60,13 @@ class Hall_Scene(SceneBase):
                 self.collides = True
                 if isinstance(collisions[0], Box):
                     pass
+<<<<<<< HEAD
         if self.player.get_details()['Time'] == 1861:
             self.box_onscreen = False
+=======
+
+
+>>>>>>> f3a75097771f9c6bb4c344e3b8f84cf7accf1edd
 
         pygame.display.update()
 
@@ -60,11 +75,32 @@ class Hall_Scene(SceneBase):
             screen.blit(self.bg_sepia, (self.bgX, 0))
         else:
             screen.blit(self.bg_image, (self.bgX, 0))
+<<<<<<< HEAD
             # Show message to player to go back in time, box fades away, player can move forward
 
         if self.box_onscreen:
             self.box_group.update()
             self.box_group.draw(screen)
+=======
+
+        # if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
+        #     # Render the box
+            
+        #     self.box_onscreen = True
+        #     # collisions = pygame.sprite.spritecollide(
+        #         # self.player, self.box_group, False, collided=None)
+        #     self.collides = False
+        #     if len(collisions) != 0:
+        #         self.player.walking = False
+        #         self.moving = False
+        #         self.collides = True
+        #         if isinstance(collisions[0], Box):
+        #             pass
+                    # Show message to player to go back in time, box fades away, player can move forward
+        if self.box_onscreen:
+            obj_group.update()
+            obj_group.draw(screen)
+>>>>>>> f3a75097771f9c6bb4c344e3b8f84cf7accf1edd
         else:
             self.collides = False
 
@@ -81,6 +117,10 @@ class Room_Scene(SceneBase):
         self.bg_image = pygame.image.load('assets/bedroom.png')
         self.counter = 0
         self.doorOpenS = 'sounds/effects/door-open.wav'
+<<<<<<< HEAD
+=======
+
+>>>>>>> f3a75097771f9c6bb4c344e3b8f84cf7accf1edd
 
         self.frameClicked = False
         self.chairClicked = False
@@ -100,11 +140,20 @@ class Room_Scene(SceneBase):
                         item.onclick()
 
     def Update(self):
+<<<<<<< HEAD
 
         if(self.counter == 0):
             pygame.mixer.music.load(self.doorOpenS)
             pygame.mixer
         print("uh-oh, you didn't override this in the child class")
+=======
+      
+        if(self.counter == 0):
+          pygame.mixer.music.load(self.doorOpenS)
+          pygame.mixer.music.play(0)
+          self.counter = 1
+        #print("uh-oh, you didn't override this in the child class")
+>>>>>>> f3a75097771f9c6bb4c344e3b8f84cf7accf1edd
 
     def Render(self, screen, sepia):
         screen.blit(self.bg_image, (self.bgX, 0))
@@ -112,4 +161,5 @@ class Room_Scene(SceneBase):
         self.objects_group.draw(self.screen)
 
     def SwitchToScene(self, next_scene):
+        self.counter = 0
         self.next = next_scene
