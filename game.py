@@ -24,9 +24,14 @@ class Game:
         os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
         # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
-        self.gameM = 'sounds/music/Greenbrier.wav'
-
+        
+        
         pygame.init()
+            
+        #sound
+        self.gameM = 'sounds/music/Greenbrier.wav'
+        self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel.wav')
+        
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         pygame.mixer.music.set_volume(0.2)
         # self.screen = pygame.display.set_mode(
@@ -85,6 +90,8 @@ class Game:
                         # player.change_date()
                         user_interface.change_date()
                         timechange = True
+                        
+                        self.timeTravel.play()
                 if quit_opt:
                     self.done = True
                 else:
