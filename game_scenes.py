@@ -76,7 +76,7 @@ class Hall_Scene(SceneBase):
         #         if isinstance(collisions[0], Box):
         #             pass
                     # Show message to player to go back in time, box fades away, player can move forward
-          if self.box_onscreen:
+        if self.box_onscreen:
             obj_group.update()
             obj_group.draw(screen)
         else:
