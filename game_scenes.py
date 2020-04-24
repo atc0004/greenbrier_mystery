@@ -23,6 +23,7 @@ class Hall_Scene(SceneBase):
                        self.screen, True)
         self.box_group = pygame.sprite.Group(self.box)
         self.box_onscreen = False
+        self.canAdvance = False
 
     def ProcessInput(self, events, pressed_keys):
 
@@ -38,7 +39,7 @@ class Hall_Scene(SceneBase):
             self.Update()
 
     def Update(self):
-        print(self.bgX)
+        #(self.bgX)
         if self.moving and not self.collides and self.player.x > self.w/2-1 and self.bgX > -2500:
             self.bgX -= self.BG_SPEED
             # if self.box_onscreen:
@@ -63,7 +64,8 @@ class Hall_Scene(SceneBase):
                     pass
         if self.player.get_details()['Time'] == 1861:
             self.box_onscreen = False
-
+        if(self.bgX <= -1600):
+            self.canAdvance = True
         pygame.display.update()
 
     def Render(self, screen, sepia):
