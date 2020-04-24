@@ -91,6 +91,8 @@ class Game:
                         quit_opt = True
                     if event.key == pygame.K_d:
                         self.player.walking = True
+                    if event.key == pygame.K_a:
+                        self.player.walking_left = True
                     if event.key == pygame.K_RETURN:
                         self.scene_num += 1
                         if self.scene_num == len(self.all_scenes):
@@ -103,6 +105,10 @@ class Game:
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_d:
                         self.player.walking = False
+                        
+                    if event.key == pygame.K_a:
+                        self.player.walking_left = False
+                        
                     if event.key == pygame.K_t:
                         # player.change_date()
                         user_interface.change_date()
