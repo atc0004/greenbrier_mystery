@@ -1,6 +1,6 @@
 import pygame
 from scenebase import SceneBase
-from objects import Box
+from objects import Box, Painting
 
 
 class Hall_Scene(SceneBase):
@@ -16,9 +16,8 @@ class Hall_Scene(SceneBase):
         self.collides = False
         self.screen = screen
         self.box = Box((1921, 775), 'assets/classifiedcrate.png',
-                           self.screen, True)
+                       self.screen, True)
         self.box_onscreen = False
-        
 
     def ProcessInput(self, events, pressed_keys):
 
@@ -45,7 +44,7 @@ class Hall_Scene(SceneBase):
 
         if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
             # Render the box
-            
+
             self.box_onscreen = True
             obj_group = pygame.sprite.Group(self.box)
             collisions = pygame.sprite.spritecollide(
@@ -68,17 +67,37 @@ class Hall_Scene(SceneBase):
 
 
 class Room_Scene(SceneBase):
-    def __init__(self):
+    def __init__(self, player, screen):
         SceneBase.__init__(self)
+        self.player = player
+        self.screen = screen
+        self.bgX = 0
+        self.bg_image = pygame.image.load('assets/bedroom.png')
+
+        self.frameClicked = False
+        self.chairClicked = False
+
+        # Need to initialize the objects
+        # Painting, Chair, folder, etc
+        self.objects_list = [
+            Painting((1000, 775), 'assets/classifiedcrate.png', self.screen, False, True)]
+        self.objects_group = pygame.sprite.Group(self.objects_list[0])
 
     def ProcessInput(self, events, pressed_keys):
-        pass
+
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                for item in self.objects_list:
+                    if item.rect.collidepoint(event.pos):
+                        item.onclick()
 
     def Update(self):
         print("uh-oh, you didn't override this in the child class")
 
-    def Render(self, screen):
-        print("uh-oh, you didn't override this in the child class")
+    def Render(self, screen, sepia):
+        screen.blit(self.bg_image, (self.bgX, 0))
+        self.objects_group.update()
+        self.objects_group.draw(self.screen)
 
     def SwitchToScene(self, next_scene):
         self.next = next_scene
