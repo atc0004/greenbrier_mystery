@@ -1,7 +1,7 @@
 import pygame
 import os
 from button import PlayButton, SettingsButton, ExitButton, BackButton
-from game_scenes import Hall_Scene, Room_Scene
+from game_scenes import Hall_Scene, Room_Scene, Character_Scene
 from player import Player
 from objects import Box
 from interface import UI
@@ -40,17 +40,19 @@ class Game:
         self.done = False
         self.clock = pygame.time.Clock()
         self.menu = True
-        self.player = Player(self.screen)
-        self.all_scenes = [
-            ("Hallway", Hall_Scene(self)),
-            ("Room_Scene", Room_Scene(self.player, self.screen))
-        ]
+        # self.player = Player(self.screen)
+        self.all_scenes = []
+        # self.all_scenes = [
+        #     ("Hallway", Hall_Scene(self)),
+        #     ("Room_Scene", Room_Scene(self.player, self.screen))
+        # ]
         self.scene_names = ["Hallway", "Room_Scene"]
         self.scene_num = 0
-        self.current_scene = self.all_scenes[self.scene_num][1]
+        # self.current_scene = self.all_scenes[self.scene_num][1]
         self.collision_counter = 0
         self.bleedout_timer = 0
         self.bleeding = False
+        self.model_chosen = 'boy'
 
     """Main Game Loop
 
@@ -58,6 +60,12 @@ class Game:
     """
 
     def main_loop(self):
+        self.player = Player(self.screen, self.model_chosen)
+        self.all_scenes = [
+            ("Hallway", Hall_Scene(self)),
+            ("Room_Scene", Room_Scene(self.player, self.screen))
+        ]
+        self.current_scene = self.all_scenes[self.scene_num][1]
         pygame.mixer.music.load(self.gameM)
         pygame.mixer.music.play(-1)
         my_group = pygame.sprite.Group(self.player)
@@ -303,6 +311,33 @@ class Game:
             pygame.display.update()
         pygame.quit()
         exit()
+
+    def character_select(self):
+        print("Character Select")
+        char_menu = True
+        scene = Character_Scene(self)
+        events_list = []
+        while char_menu:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    char_menu = False
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        char_menu = False
+                        pygame.quit()
+                        exit()
+                else:
+                    events_list.append(event)
+            scene.ProcessInput(events_list, [])
+            scene.Update()
+            scene.Render(self.screen)
+            if scene.canAdvance:
+                char_menu = False
+            self.clock.tick(60)
+            pygame.display.update()
+        self.main_loop()
 
 
 """Main Runner

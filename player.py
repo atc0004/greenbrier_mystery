@@ -2,7 +2,7 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, screen):
+    def __init__(self, screen, model):
         super(Player, self).__init__()
         self.walking = False
         self.walking_left = False
@@ -10,19 +10,19 @@ class Player(pygame.sprite.Sprite):
         self.images = []
         self.images_left = []
         self.standing_image = pygame.image.load(
-            'assets/characters/boy.png').convert_alpha()
+            f'assets/characters/{model}.png').convert_alpha()
         self.w, self.h = pygame.display.get_surface().get_size()
         self.x = 120
         self.y = 600
         for x in range(0, 5):
             print(x)
             i = pygame.image.load(
-                f'assets/characters/boy_{x}.png').convert_alpha()
+                f'assets/characters/{model}_{x}.png').convert_alpha()
             self.images.append(pygame.transform.flip(i, True, False))
         for x in range(0, 5):
             print(x)
             i = pygame.image.load(
-                f'assets/characters/boy_{x}.png').convert_alpha()
+                f'assets/characters/{model}_{x}.png').convert_alpha()
             self.images_left.append(i)
         self.current_time = 1961
         # Player details, for now it just has the demo stuff
@@ -34,7 +34,6 @@ class Player(pygame.sprite.Sprite):
             'Floor': 2,
             'Time': 1961
         }
-
         self.index = 0
         self.image = self.images[self.index]
         self.rect = pygame.Rect(self.x, self.y, 155, 395)

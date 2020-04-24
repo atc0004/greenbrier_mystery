@@ -3,6 +3,56 @@ from scenebase import SceneBase
 from objects import Box, Chair, Document, DocumentItem, Gear, GearItem, Item, Painting
 
 
+class Character_Scene(SceneBase):
+    def __init__(self, game):
+        SceneBase.__init__(self)
+        self.game = game
+        # self.game.player.model_chosen
+        self.screen = self.game.screen
+        self.char_options = ["boy", "girl"]
+        self.canAdvance = False
+        self.w, self.h = pygame.display.get_surface().get_size()
+
+        self.bg_image = pygame.transform.smoothscale(pygame.image.load(
+            'assets/menu_bg.png').convert(), (self.w, self.h))
+
+        self.boySprite = pygame.sprite.Sprite()
+        self.boySprite.image = pygame.image.load('assets/characters/boy.png')
+        self.boySprite.rect = self.boySprite.image.get_rect(
+            center=(self.w/2-self.w/4, self.h/2))
+        self.girlSprite = pygame.sprite.Sprite()
+        self.girlSprite.image = pygame.image.load('assets/characters/girl.png')
+        self.girlSprite.rect = self.boySprite.image.get_rect(
+            center=((self.w/2+self.w/4, self.h/2)))
+
+        self.character_list = [self.boySprite, self.girlSprite]
+        self.chars_group = pygame.sprite.Group()
+        self.chars_group.add(self.boySprite)
+        self.chars_group.add(self.girlSprite)
+
+    def ProcessInput(self, events, pressed_keys):
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                print(event.pos)
+                i = 0
+                for item in self.character_list:
+                    if item.rect.collidepoint(event.pos):
+                        self.game.model_chosen = self.char_options[i]
+                        self.canAdvance = True
+                    i += 1
+
+    def Update(self):
+        pass
+
+    def Render(self, screen):
+        self.screen.blit(self.bg_image, (0, 0))
+        self.chars_group.update()
+        self.chars_group.draw(self.screen)
+
+    def SwitchToScene(self, next_scene):
+        return super().SwitchToScene(next_scene)
+
+
 class Hall_Scene(SceneBase):
     def __init__(self, game):
         SceneBase.__init__(self)

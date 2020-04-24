@@ -84,6 +84,7 @@ class PlayButton(Button):
         pygame.mixer.music.stop()
         # Go to main game loop.. but how?
         calling.main_loop()
+        # calling.character_select()
 
         print('clicked play')
         # return 2
@@ -91,6 +92,7 @@ class PlayButton(Button):
 
 class BackButton(Button):
     def mouse_click(self, calling):
+        # calling.character_select()
         calling.main_menu()
         print("back to main menu")
 
