@@ -1,6 +1,6 @@
 import pygame
 from scenebase import SceneBase
-from objects import Box, Painting
+from objects import Box, Painting, Chair
 
 
 class Hall_Scene(SceneBase):
@@ -81,20 +81,24 @@ class Room_Scene(SceneBase):
         self.bg_image = pygame.image.load('assets/bedroom.png')
         self.counter = 0
         self.doorOpenS = 'sounds/effects/door-open.wav'
-
+        w, h = pygame.display.get_surface().get_size()
         self.frameClicked = False
         self.chairClicked = False
-
+        self.frameCoords = (0.58 * w, 0.35*h)
+        self.chairCoords = (0.7 * w, 0.6*h)
         # Need to initialize the objects
         # Painting, Chair, folder, etc
         self.objects_list = [
-            Painting((1000, 775), 'assets/classifiedcrate.png', self.screen, False, True)]
-        self.objects_group = pygame.sprite.Group(self.objects_list[0])
+            Painting(self.frameCoords, 'assets/frame.png', self.screen, False, True), Chair(self.chairCoords, 'assets/chair.png', self.screen, False, True)]
+        self.objects_group = pygame.sprite.Group()
+        for i in self.objects_list:
+            self.objects_group.add(i)
 
     def ProcessInput(self, events, pressed_keys):
 
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                print(event.pos)
                 for item in self.objects_list:
                     if item.rect.collidepoint(event.pos):
                         item.onclick()
@@ -104,19 +108,22 @@ class Room_Scene(SceneBase):
         if(self.counter == 0):
             # pygame.mixer.music.load(self.doorOpenS)
             creak = pygame.mixer.Sound(self.doorOpenS)
+            creak.set_volume(0.3)
             # pygame.mixer.music.play(0)
             creak.play()
             self.counter = 1
             pygame.mixer
-            
+
             while pygame.mixer.get_busy():
                 pass
 
-            
         #print("uh-oh, you didn't override this in the child class")
 
     def Render(self, screen, sepia):
         screen.blit(self.bg_image, (self.bgX, 0))
+        # for obj in self.objects_list:
+        # obj.update()
+        # obj.draw(self.screen)
         self.objects_group.update()
         self.objects_group.draw(self.screen)
 

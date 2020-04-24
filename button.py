@@ -15,17 +15,16 @@ class Button(object):
         self.button_highlighted = False
         self.last_down_over_button = False
         self.visible = True
-        
 
     def draw(self, screen):
         if self.button_highlighted:
             screen.blit(self.hover_surface, self.button_rect)
         else:
             screen.blit(self.default_surface, self.button_rect)
-    
+
     def update(self):
         if self.button_highlighted:
-            text_color = (255,255,255)
+            text_color = (255, 255, 255)
         else:
             text_color = (235, 222, 100)
         text_surface = self.font.render(self.text, True, text_color)
@@ -55,7 +54,7 @@ class Button(object):
                 self.button_pressed = True
                 self.last_down_over_button = True
                 actions.append('click')
-        
+
         clicked = False
         if event.type == pygame.MOUSEBUTTONUP:
             if self.last_down_over_button:
@@ -72,23 +71,30 @@ class Button(object):
     # Override these
     def mouse_click(self):
         pass
+
     def mouse_enter(self):
         self.update()
+
     def mouse_exit(self):
         self.update()
+
 
 class PlayButton(Button):
     def mouse_click(self, calling):
         pygame.mixer.music.stop()
         # Go to main game loop.. but how?
         calling.main_loop()
-        
+
         print('clicked play')
         # return 2
+
+
 class SettingsButton(Button):
     def mouse_click(self, calling):
         # Go to main game loop.. but how?
         print('clicked settings')
+
+
 class ExitButton(Button):
     def mouse_click(self, calling):
         # Go to main game loop.. but how?

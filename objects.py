@@ -7,10 +7,10 @@ class Objects(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(image_path)
         self.rect = self.image.get_rect().move(pos)
-        self.screen = screen
+        self.screen=screen
         # self.area = self.screen.get_rect()
-        self.debug = debug
-        self.pos = pos
+        self.debug=debug
+        # self.center=pos
         self.x = pos[0]
         self.y = pos[1]
 
@@ -19,10 +19,10 @@ class Objects(pygame.sprite.Sprite):
 
 
 class Interactable(Objects):
-    def __init__(self, pos, image_path, screen, disappears, debug=False):
+    def __init__(self, pos, image_path, screen, disappears, debug = False):
         Objects.__init__(self, pos, image_path, screen, debug)
-        self.interactable = True
-        self.clicked = False
+        self.interactable=True
+        self.clicked=False
 
     def update(self):
         print("Override OnClick method.")
@@ -32,7 +32,7 @@ class Interactable(Objects):
 
 
 class Box(Objects):
-    def __init__(self, pos, image_path, screen, debug=False):
+    def __init__(self, pos, image_path, screen, debug = False):
         Objects.__init__(self, pos, image_path, screen, debug)
 
     def update(self):
@@ -42,7 +42,7 @@ class Box(Objects):
 
 
 class Painting(Interactable):
-    def __init__(self, pos, image_path, screen, disappears, debug=False):
+    def __init__(self, pos, image_path, screen, disappears, debug = False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
 
     def update(self):
@@ -50,4 +50,16 @@ class Painting(Interactable):
             print("Painting clicked")
 
     def onclick(self):
-        self.clicked = True
+        self.clicked=True
+
+
+class Chair(Interactable):
+    def __init__(self, pos, image_path, screen, disappears, debug = False):
+        Interactable.__init__(self, pos, image_path, screen, disappears, debug)
+
+    def update(self):
+        if self.clicked:
+            print("Chair clicked")
+
+    def onclick(self):
+        self.clicked=True

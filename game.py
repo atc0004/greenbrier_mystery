@@ -31,9 +31,10 @@ class Game:
         #sound
         self.gameM = 'sounds/music/Greenbrier.wav'
         self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel.wav')
-        
+        self.timeTravel.set_volume(0.1)
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.01)
+        
         # self.screen = pygame.display.set_mode(
         # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
