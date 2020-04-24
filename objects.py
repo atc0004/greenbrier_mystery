@@ -65,7 +65,7 @@ class Chair(Interactable):
                 self.rect.x = self.oX
                 self.rect.y = self.oY
                 originalPos = True
-            if(self.rect.x > 1200 or self.rect.y > 550):
+            if(self.rect.x > 1200 or self.rect.y > 550 and originalPos is True):
                 self.rect.x -= 1
                 self.rect.y -= 1
                 
