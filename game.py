@@ -24,17 +24,15 @@ class Game:
         os.environ['SDL_VIDEO_WINDOW_POS'] = "0,1"
         # os.environ['SDL_VIDEODRIVER'] = 'directx'
         self.WINDOW_SIZE = [1920, 1080]
-        
-        
+
         pygame.init()
-            
-        #sound
+        # sound
         self.gameM = 'sounds/music/Greenbrier.wav'
         self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel.wav')
         self.timeTravel.set_volume(0.1)
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
+        pygame.display.set_caption('The Greenbrier - A Mystery In Time')
         pygame.mixer.music.set_volume(0.01)
-        
         # self.screen = pygame.display.set_mode(
         # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
@@ -69,16 +67,16 @@ class Game:
             sepia = False
             events = []
             quit_opt = False
-            
+
             if self.bleeding:
                 self.bleedout_timer += 1
-                if (self.bleedout_timer%2 == 0):
-                    #moving backwards
+                if (self.bleedout_timer % 2 == 0):
+                    # moving backwards
                     if self.player.details['Time'] != 1861:
-                        self.screen.fill((240  , 208, 2))
+                        self.screen.fill((240, 208, 2))
                         user_interface.render()
                         user_interface.update()
-                    else:#moving forward in time 
+                    else:  # moving forward in time
                         self.screen.fill((106, 194, 252))
                         user_interface.render()
                         user_interface.update()
@@ -91,7 +89,7 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         quit_opt = True
-                    if event.key == pygame.K_RIGHT:
+                    if event.key == pygame.K_d:
                         self.player.walking = True
                     if event.key == pygame.K_RETURN:
                         self.scene_num += 1
@@ -103,7 +101,7 @@ class Game:
                         print(
                             f"Curr Scene {self.scene_num} : {self.current_scene}")
                 elif event.type == pygame.KEYUP:
-                    if event.key == pygame.K_RIGHT:
+                    if event.key == pygame.K_d:
                         self.player.walking = False
                     if event.key == pygame.K_t:
                         # player.change_date()
@@ -169,16 +167,19 @@ class Game:
         menuM = 'sounds/music/menuAmbiance.wav'
         pygame.mixer.music.load(menuM)
         pygame.mixer.music.play(-1)
-        gb_img = pygame.image.load('assets/menu_bg.png')
-        title_img = pygame.image.load('assets/title.png')
+        gb_img = pygame.image.load('assets/menu_bg.png').convert_alpha()
+        title_img = pygame.image.load('assets/title.png').convert_alpha()
         title_rotate_image = title_img
         rect = title_img.get_rect()
-        button1_img = pygame.image.load('assets/button.png')
+        button1_img = pygame.image.load('assets/button.png').convert_alpha()
         button2_img = button1_img.copy()
         button3_img = button1_img.copy()
-        button1_hover = pygame.image.load('assets/button_hover.png')
-        button2_hover = pygame.image.load('assets/button_hover.png')
-        button3_hover = pygame.image.load('assets/button_hover.png')
+        button1_hover = pygame.image.load(
+            'assets/button_hover.png').convert_alpha()
+        button2_hover = pygame.image.load(
+            'assets/button_hover.png').convert_alpha()
+        button3_hover = pygame.image.load(
+            'assets/button_hover.png').convert_alpha()
         button_font = pygame.font.Font(
             './assets/fonts/Cheap_Pine_Sans.otf', 100)
 
