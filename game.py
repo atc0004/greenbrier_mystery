@@ -28,11 +28,12 @@ class Game:
         pygame.init()
         # sound
         self.gameM = 'sounds/music/Greenbrier.wav'
-        self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel.wav')
+        self.timeTravel = pygame.mixer.Sound('sounds/effects/timetravel_short.wav')
         self.timeTravel.set_volume(0.1)
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
         pygame.display.set_caption('The Greenbrier - A Mystery In Time')
         pygame.mixer.music.set_volume(0.01)
+        pygame.mixer.fadeout(500)
         # self.screen = pygame.display.set_mode(
         # self.WINDOW_SIZE, flags=pygame.FULLSCREEN | pygame.DOUBLEBUF)
         self.done = False
@@ -63,14 +64,17 @@ class Game:
         user_interface = UI(self.screen, self.player, True)
         timechange = False
         # print(type(self.screen))
+        tip = False
+        pygame.time.set_timer(pygame.USEREVENT, 4000)
         while not self.done:
+
             sepia = False
             events = []
             quit_opt = False
 
             if self.bleeding:
                 self.bleedout_timer += 1
-                if (self.bleedout_timer % 2 == 0):
+                if (self.bleedout_timer % 10 == 0):
                     # moving backwards
                     if self.player.details['Time'] != 1861:
                         self.screen.fill((240, 208, 2))
@@ -80,12 +84,17 @@ class Game:
                         self.screen.fill((106, 194, 252))
                         user_interface.render()
                         user_interface.update()
-            if self.bleedout_timer > 30:
+            if self.bleedout_timer > 60:
                 self.bleeding = False
                 self.bleedout_timer = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit_opt = True
+                elif event.type == pygame.USEREVENT:
+                    # tip = False
+                    user_interface.showTip()
+                    pygame.time.set_timer(pygame.USEREVENT, 4000)
+
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         quit_opt = True
@@ -93,6 +102,13 @@ class Game:
                         self.player.walking = True
                     if event.key == pygame.K_a:
                         self.player.walking_left = True
+                    if event.key == pygame.K_t:
+                        # player.change_date()
+                        self.timeTravel.play()
+                        user_interface.change_date()
+                        timechange = True
+                        self.bleeding = True
+                        self.bleedout_timer = 0
                     if event.key == pygame.K_RETURN:
                         if(self.scene_num == 0):
                             if(self.current_scene.canAdvance):  
@@ -111,13 +127,7 @@ class Game:
                     if event.key == pygame.K_a:
                         self.player.walking_left = False
                         
-                    if event.key == pygame.K_t:
-                        # player.change_date()
-                        user_interface.change_date()
-                        timechange = True
-                        self.bleeding = True
-                        self.bleedout_timer = 0
-                        self.timeTravel.play()
+                    
 
                 if quit_opt:
                     self.done = True
@@ -137,8 +147,9 @@ class Game:
 
             user_interface.render()
             user_interface.update()
-            #user_interface.showTip()
-            
+            # user_interface.render_dialogue_view()
+                # tip = False
+
             pygame.display.flip()
             self.clock.tick(60)
         pygame.quit()
@@ -150,20 +161,22 @@ class Game:
         gb_img = pygame.image.load('assets/menu_bg.png').convert()
         button1_img = pygame.image.load('assets/button.png')
         button1_hover = pygame.image.load('assets/button_hover.png')
-        button_font = pygame.font.Font('./assets/fonts/Cheap_Pine_Sans.otf', 100)
+        button_font = pygame.font.Font(
+            './assets/fonts/Cheap_Pine_Sans.otf', 100)
         button1_rect = pygame.Rect(720, 840, 520, 170)
-        exit_button = ExitButton(button1_rect, "EXIT", button_font, button1_img, button1_hover)
+        exit_button = ExitButton(button1_rect, "EXIT",
+                                 button_font, button1_img, button1_hover)
         all_buttons = [exit_button]
-        #a_img
-        #d_img
-        #t_img
+        # a_img
+        # d_img
+        # t_img
         x = 0
         while x < 100:
             # render menu
             self.screen.blit(gb_img, (0, 0))
             for b in all_buttons:
                 b.draw(self.screen)
-            
+
             self.clock.tick(60)
             pygame.display.update()
             x = x+1
