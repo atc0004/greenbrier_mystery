@@ -11,6 +11,7 @@ class Hall_Scene(SceneBase):
         self.screen = self.game.screen
         self.BG_SPEED = 4
         self.moving = False
+        self.moving_left = False
         self.w, self.h = pygame.display.get_surface().get_size()
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/scene_1.png').convert_alpha()
@@ -22,6 +23,7 @@ class Hall_Scene(SceneBase):
                        self.screen, True)
         self.box_group = pygame.sprite.Group(self.box)
         self.box_onscreen = False
+        self.canAdvance = False
 
     def ProcessInput(self, events, pressed_keys):
 
@@ -30,13 +32,22 @@ class Hall_Scene(SceneBase):
                 self.moving = True
             if event.type == pygame.KEYUP and event.key == pygame.K_d:
                 self.moving = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+                self.moving_left = True
+            if event.type == pygame.KEYUP and event.key == pygame.K_a:
+                self.moving_left = False
             self.Update()
 
     def Update(self):
-        if self.moving and not self.collides and self.player.x > self.w/2-1:
+        #(self.bgX)
+        if self.moving and not self.collides and self.player.x > self.w/2-1 and self.bgX > -2500:
             self.bgX -= self.BG_SPEED
             # if self.box_onscreen:
             self.box.rect.x -= self.BG_SPEED
+        if self.moving_left and not self.collides and self.bgX <0:
+            self.bgX += self.BG_SPEED
+            # if self.box_onscreen:
+            self.box.rect.x += self.BG_SPEED
         self.edge_X = self.bgX + 1920
         if self.edge_X <= 1450 and self.player.get_details()['Time'] != 1861:
             # Render the box
@@ -53,7 +64,8 @@ class Hall_Scene(SceneBase):
                     pass
         if self.player.get_details()['Time'] == 1861:
             self.box_onscreen = False
-
+        if(self.bgX <= -1600):
+            self.canAdvance = True
         pygame.display.update()
 
     def Render(self, screen, sepia):
