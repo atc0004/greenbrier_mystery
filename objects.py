@@ -7,10 +7,10 @@ class Objects(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(image_path).convert_alpha()
         self.rect = self.image.get_rect().move(pos)
-        self.screen=screen
+        self.screen = screen
         # self.area = self.screen.get_rect()
-        self.debug=debug
-        # self.center=pos
+        self.debug = debug
+        self.pos = pos
         self.x = pos[0]
         self.y = pos[1]
 
@@ -19,20 +19,27 @@ class Objects(pygame.sprite.Sprite):
 
 
 class Interactable(Objects):
-    def __init__(self, pos, image_path, screen, disappears, debug = False):
+    def __init__(self, pos, image_path, screen, disappears, debug=False):
         Objects.__init__(self, pos, image_path, screen, debug)
-        self.interactable=True
-        self.clicked=False
+        self.interactable = True
+        self.clicked = False
 
     def update(self):
         print("Override OnClick method.")
 
     def onclick(self):
+        if self.disappears:
+            self.kill()
         print("Override OnClick method.")
 
 
+class Item:
+    def __init__(self, name):
+        self.name = name
+
+
 class Box(Objects):
-    def __init__(self, pos, image_path, screen, debug = False):
+    def __init__(self, pos, image_path, screen, debug=False):
         Objects.__init__(self, pos, image_path, screen, debug)
 
     def update(self):
@@ -42,19 +49,50 @@ class Box(Objects):
 
 
 class Painting(Interactable):
-    def __init__(self, pos, image_path, screen, disappears, debug = False):
+    def __init__(self, pos, image_path, screen, disappears, debug=False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
+        self.max_move = 40
+        self.moved = 0
 
     def update(self):
         if self.clicked:
-            print("Painting clicked")
+            # print("Painting clicked")
+            if self.moved < self.max_move:
+                self.rect.x -= 2
+                self.moved += 1
 
     def onclick(self):
-        self.clicked=True
+        if not self.clicked:
+            self.clicked = True
+            return Gear(self.pos, 'assets/ui/gear.png', self.screen, True)
+
+
+class Gear(Interactable):
+    def __init__(self, pos, image_path, screen, disappears, debug=False):
+        Interactable.__init__(self, pos, image_path, screen, disappears, debug)
+        self.image = pygame.image.load(image_path).convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50, 50))
+
+    def update(self):
+        if self.clicked:
+            print("Clicked Gear")
+
+    def onclick(self):
+        if not self.clicked:
+            self.clicked = True
+            return GearItem()
+        # Need to give player aonother Gear
+        # return Gear?(self.pos, 'assets/ui/gear.png', self.screen, True, )
+
+
+class GearItem(Item):
+    def __init__(self):
+        Item.__init__(self, "Parts")
+        self.name = "Parts"
 
 
 class Chair(Interactable):
-    def __init__(self, pos, image_path, screen, disappears, debug = False):
+    def __init__(self, pos, image_path, screen, disappears, debug=False):
         Interactable.__init__(self, pos, image_path, screen, disappears, debug)
         self.originalPos = True
         self.oX = self.rect.x

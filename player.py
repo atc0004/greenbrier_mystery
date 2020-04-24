@@ -48,6 +48,9 @@ class Player(pygame.sprite.Sprite):
         self.ellipse = pygame.draw.ellipse(surface, black, size)
         self.surface2 = pygame.transform.rotate(surface, -60)
 
+    def add_item(self, item):
+        self.details[item] = self.details[item] + 1
+
     def update(self):
         self.screen.blit(self.surface2, self.feet_coords)
         if self.walking:
@@ -61,7 +64,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.images[self.index//6]
             self.feet_coords = (
                 self.rect.center[0] - 300, self.rect.center[1]-30)
-            
+
         elif self.walking_left:
             self.index += 1
             # if self.index >= len(self.images):

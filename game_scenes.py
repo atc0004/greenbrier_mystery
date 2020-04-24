@@ -1,6 +1,6 @@
 import pygame
 from scenebase import SceneBase
-from objects import Box, Painting, Chair
+from objects import Box, Painting, Chair, Item, Gear, GearItem
 
 
 class Hall_Scene(SceneBase):
@@ -15,7 +15,8 @@ class Hall_Scene(SceneBase):
         self.w, self.h = pygame.display.get_surface().get_size()
         self.bgX = 0
         self.bg_image = pygame.image.load('assets/scene_1.png').convert_alpha()
-        self.bg_sepia = pygame.image.load('assets/hall_sepia.png').convert_alpha()
+        self.bg_sepia = pygame.image.load(
+            'assets/hall_sepia.png').convert_alpha()
         self.edge_X = self.bgX + 1920
         self.box_relative_position = 0
         self.collides = False
@@ -39,12 +40,12 @@ class Hall_Scene(SceneBase):
             self.Update()
 
     def Update(self):
-        #(self.bgX)
+        # (self.bgX)
         if self.moving and not self.collides and self.player.x > self.w/2-1 and self.bgX > -2500:
             self.bgX -= self.BG_SPEED
             # if self.box_onscreen:
             self.box.rect.x -= self.BG_SPEED
-        if self.moving_left and not self.collides and self.bgX <0:
+        if self.moving_left and not self.collides and self.bgX < 0:
             self.bgX += self.BG_SPEED
             # if self.box_onscreen:
             self.box.rect.x += self.BG_SPEED
@@ -108,7 +109,11 @@ class Room_Scene(SceneBase):
         self.objects_group = pygame.sprite.Group()
         for i in self.objects_list:
             self.objects_group.add(i)
-
+        self.is_new_item = None
+        self.new_item_group = pygame.sprite.Group()
+        self.items_found = 0
+        self.items_available = 2
+        self.canAdvance = False
     def ProcessInput(self, events, pressed_keys):
 
         for event in events:
@@ -116,23 +121,22 @@ class Room_Scene(SceneBase):
                 print(event.pos)
                 for item in self.objects_list:
                     if item.rect.collidepoint(event.pos):
-                        item.onclick()
-
+                        self.is_new_item = item.onclick()
+                        if issubclass(self.is_new_item.__class__, Item):
+                            self.player.add_item(self.is_new_item.name)
+                            self.is_new_item = None
+                            self.items_found += 1
+                        
     def Update(self):
 
         if(self.counter == 0):
-            # pygame.mixer.music.load(self.doorOpenS)
             creak = pygame.mixer.Sound(self.doorOpenS)
             creak.set_volume(0.3)
-            # pygame.mixer.music.play(0)
             creak.play()
             self.counter = 1
             pygame.mixer
-
-            # while pygame.mixer.get_busy():
-                # pass
-
-        #print("uh-oh, you didn't override this in the child class")
+        if self.items_found == self.items_available:
+            self.canAdvance = True
 
     def Render(self, screen, sepia):
         if pygame.mixer.get_busy():
@@ -141,9 +145,15 @@ class Room_Scene(SceneBase):
         # for obj in self.objects_list:
         # obj.update()
         # obj.draw(self.screen)
-        self.objects_group.update()
-        self.objects_group.draw(self.screen)    
+        if self.is_new_item is not None and self.items_found  < 2:
+            self.new_item_group.add(self.is_new_item)
+            self.objects_list.append(self.is_new_item)
+            self.new_item_group.update()
+            self.new_item_group.draw(self.screen)
 
+        self.objects_group.update()
+        self.objects_group.draw(self.screen)
+        
     def SwitchToScene(self, next_scene):
         self.counter = 0
         self.next = next_scene
